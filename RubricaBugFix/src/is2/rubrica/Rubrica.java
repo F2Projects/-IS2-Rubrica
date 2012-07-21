@@ -4,8 +4,8 @@
  * @author Alenadri Enrico - III G
  * @date 6/02/2009
  * Fixed by:
- * "helloIAmPau - Pasquale Boemio <boemianrapsodi[at]gmail.com>"
- * "b3by" - Antonio Bevilacqua <b3by.in.th3.sky[at]gmail.com>"
+ * "helloIAmPau - Pasquale Boemio <pa.boemio[at]studenti.unina.it>"
+ * "b3by" - Antonio Bevilacqua <anto.bevilacqua[at]studenti.unina.it>"
  * ----------
  * This is the first called class. It simply shows the jpanel "FramePri".
  * 

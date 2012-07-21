@@ -1,3 +1,21 @@
+/**
+ * PanelInserimento.java
+ * 
+ * @author Alenadri Enrico - III G
+ * @date 6/02/2009
+ * Fixed by:
+ * "helloIAmPau - Pasquale Boemio <pa.boemio[at]studenti.unina.it>"
+ * "b3by" - Antonio Bevilacqua <anto.bevilacqua[at]studenti.unina.it>"
+ * ----------
+ * 
+ * We have fixed:
+ * 1. indentation
+ * 2. added some inline documentation
+ * 3. added the serialVersionUID (not necessary)
+ * 
+ * NB: Some class or variables name are edited in order to respect the standard "camel notation"
+ * to make this source code more readable. 
+ */
 package is2.rubrica;
 
 import java.awt.TextArea;
@@ -16,194 +34,206 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-class PanelInserimento extends JPanel implements ActionListener
-{
-  private boolean exist=true;
-  private int x=0,
-              num=0,
-		       linee=0,
-		       lineeStm=0,
-		       i,
-		       cont,
-		       con;
-  private String nameRub,
-                 linea,
-                 stringa,
-                 risCerca="";
-  private TextField inNome,
-                    inCognome,
-                    inNumero,
-                    inIndirizzo,
-                    inNameRub,
-                    inCerca;
+class PanelInserimento extends JPanel implements ActionListener{
 
-  private FileOutputStream fileS;
-  private FileReader fileL;
-  private File exFile;
-  private PrintStream scrittura;
-  private BufferedReader lettura;
-  private TextArea risultati;
-  private int[] cerca = new int[100];
-
-  private JLabel testoIns,
-                 testoStp,
-                 nome,
-                 Congome,
-                 Numero,
-                 Indirizzo,
-                 index,
-                 spazio,
-                 stmNome,
-                 stmCognome,
-                 stmNumero,
-                 stmIndirizzo,
-                 infoCerca;
-  private JButton ok,
-                  reset,
-                  savExit,
-                  invio,
-                  invio_,
-                  indIns,
-                  indStp,
-                  indCer,
-                  avanti,
-                  back,
-                  indietro,
-                  exit,
-                  Cerca;
-  public PanelInserimento()
-   {
-
-    exit = new JButton("esci");
-    spazio= new JLabel("                              ");
-
-    //Componenti Index
-	 index = new JLabel("       Cosa vuoi fare?                                    ");
-	 indIns = new JButton("Crea rubrica");
-	 indStp = new JButton("Visualizza contatti");
-	 indCer = new JButton("Cerca Contatti");
-
-
-
-
-    //Componenti inserimento nome Rubrica-inserimento scherda/stampa scheda
-	 testoIns = new JLabel("Inserisci il nome con cui salvare la rubrica        ");
-	 testoStp = new JLabel("Inserisci il nome della rubrica        ");
-	 inNameRub = new TextField(10);
-	 invio = new JButton("Invio");
-	 invio_ = new JButton("Invio ");
-
-	 //Componenti Cerca
-	 Cerca = new JButton("Cerca");
-	 infoCerca = new JLabel("Puoi cercare per Nome-Cognome-Numero-indirizzo");
-	 inCerca = new TextField(10);
-	 risultati = new TextArea(10,35);
-	 risultati.setEditable(false);
-	 risultati.setCaretPosition(0);
-
-
-
-	 //Componenti inserimento scheda
-	  nome = new JLabel("                Nome");
-	  Congome = new JLabel("                Cognome");
-	  Numero = new JLabel("                Numero Casa");
-	  Indirizzo = new JLabel("                Indirizzo");
-	  ok = new JButton("Add");
-	  reset = new JButton("Reset");
-	  savExit = new JButton("Save & Back");
-	  inNome = new TextField(17);
-	  inCognome = new TextField(17);
-	  inNumero = new TextField(17);
-	  inIndirizzo = new TextField(17);
-
-    //Componenti stampa Scheda
-    stmNome = new JLabel("Nome:");
-    stmCognome = new JLabel("Cognome:");
-    stmNumero = new JLabel("Numero:");
-    stmIndirizzo = new JLabel("Indirizzo");
-    avanti = new JButton(">>");
-    back = new JButton("Indietro");
-    indietro = new JButton("<<");
-
-
-
-    nameRub = inNameRub.getText();
-
-     //Aggiungo componenti index
-     add(index);
-     add(indIns);
-     add(indStp);
-     add(indCer);
-     add(exit);
-
-     indIns.addActionListener(this);
-     indStp.addActionListener(this);
-     indCer.addActionListener(this);
-     exit.addActionListener(this);
-
-     //Aggiungo componenti Inserimento rubrica
-     add(testoStp);
-	  add(testoIns);
-	  add(inNameRub);
-	  add(invio);
-	  add(invio_);
-
-	  invio.addActionListener(this);
-	  invio_.addActionListener(this);
-
-
-    //Aggiungo componenti Cerca
-     add(risultati);
-     add(infoCerca);
-     add(inCerca);
-     add(Cerca);
-
-     Cerca.addActionListener(this);
-
-   ///Aggiungo componenti Input contatti
-	  add(nome);
-	  add(inNome);
-	  add(Congome);
-	  add(inCognome);
-	  add(Numero);
-	  add(inNumero);
-	  add(Indirizzo);
-	  add(inIndirizzo);
-	  add(ok);
-	  add(reset);
-	  add(savExit);
-
-	  ok.addActionListener(this);
-	  reset.addActionListener(this);
-	  savExit.addActionListener(this);
-
-
-     //Aggiungo componenti Visualizzazione contatti
-     add(stmNome);
-     add(stmCognome);
-     add(stmNumero);
-     add(stmIndirizzo);
-     add(indietro);
-     add(back);
-     add(avanti);
-     indietro.setEnabled(false);
-
-     avanti.addActionListener(this);
-     back.addActionListener(this);
-     indietro.addActionListener(this);
-
-
-
-     //Setto i componenti per visualizzare la scherata di index
-	  pannelloInput(false);
-	  pannelloOutput(false);
-	  pannelloRubIns(false);
-	  pannelloCerca(false);
-	  pannelloRisultati(false);
-
-
-
-	 }
+    // L'oggetto JFrame e` un oggetto "Serializable". Poiche` abbiamo seri problemi,
+	// preferiamo eliminare anche tutti i "warning" presenti nel codice, e quindi 
+	// assegnamo a questo un id autogenerato!
+	private static final long serialVersionUID = 685601408825075349L;
+	
+	// ----------------------------------
+	// Variabile non usata
+	// private boolean exist=true;
+	// ----------------------------------
+	private int num=0,
+			linee=0,
+			lineeStm=0,
+			i,
+			cont;
+	// ----------------------------------
+	// Variabili non usate
+	// 		con,
+	//      x=0;
+	// ----------------------------------
+	
+	private String linea,
+			stringa,
+			risCerca="";
+	// ----------------------------------
+	// Variabile non usata
+	// 	nameRub;
+	// ----------------------------------
+	
+	private TextField inNome,
+			inCognome,
+			inNumero,
+			inIndirizzo,
+			inNameRub,
+			inCerca;
+	
+	private FileOutputStream fileS;
+	private FileReader fileL;
+	private File exFile;
+	private PrintStream scrittura;
+	private BufferedReader lettura;
+	private TextArea risultati;
+	private int[] cerca = new int[100];
+	
+	private JLabel testoIns,
+			testoStp,
+			nome,
+			// ----------------------------------
+			// Addirittura errori di battitura...
+			// Congome,
+			Cognome,
+			// ----------------------------------
+			Numero,
+			Indirizzo,
+			index,
+			spazio,
+			stmNome,
+			stmCognome,
+			stmNumero,
+			stmIndirizzo,
+			infoCerca;
+	
+	private JButton ok,
+			reset,
+			savExit,
+			invio,
+			invio_,
+			indIns,
+			indStp,
+			indCer,
+			avanti,
+			back,
+			indietro,
+			exit,
+			Cerca;
+	
+	public PanelInserimento(){
+		
+		this.exit = new JButton("esci");
+		this.spazio= new JLabel("                              ");
+		
+		// Componenti Index
+		this.index = new JLabel("       Cosa vuoi fare?                                    ");
+		this.indIns = new JButton("Crea rubrica");
+		this.indStp = new JButton("Visualizza contatti");
+		this.indCer = new JButton("Cerca Contatti");
+		
+		// Componenti inserimento nome Rubrica-inserimento scherda/stampa scheda
+		this.testoIns = new JLabel("Inserisci il nome con cui salvare la rubrica        ");
+		this.testoStp = new JLabel("Inserisci il nome della rubrica        ");
+		this.inNameRub = new TextField(10);
+		this.invio = new JButton("Invio");
+		this.invio_ = new JButton("Invio ");
+		
+		// Componenti Cerca
+		this.Cerca = new JButton("Cerca");
+		this.infoCerca = new JLabel("Puoi cercare per Nome-Cognome-Numero-indirizzo");
+		this.inCerca = new TextField(10);
+		this.risultati = new TextArea(10,35);
+		this.risultati.setEditable(false);
+		this.risultati.setCaretPosition(0);
+		
+		// Componenti inserimento scheda
+		this.nome = new JLabel("                Nome");
+		this.Cognome = new JLabel("                Cognome");
+		this.Numero = new JLabel("                Numero Casa");
+		this.Indirizzo = new JLabel("                Indirizzo");
+		this.ok = new JButton("Add");
+		this.reset = new JButton("Reset");
+		this.savExit = new JButton("Save & Back");
+		this.inNome = new TextField(17);
+		this.inCognome = new TextField(17);
+		this.inNumero = new TextField(17);
+		this.inIndirizzo = new TextField(17);
+		
+		// Componenti stampa Scheda
+		this.stmNome = new JLabel("Nome:");
+		this.stmCognome = new JLabel("Cognome:");
+		this.stmNumero = new JLabel("Numero:");
+		this.stmIndirizzo = new JLabel("Indirizzo");
+		this.avanti = new JButton(">>");
+		this.back = new JButton("Indietro");
+		this.indietro = new JButton("<<");
+		
+		// ----------------------------------
+		// Variabile non usata
+		// 	this.nameRub = inNameRub.getText();
+		// ----------------------------------
+		
+		// Aggiungo componenti index
+		this.add(this.index);
+		this.add(this.indIns);
+		this.add(this.indStp);
+		this.add(this.indCer);
+		this.add(this.exit);
+		
+		this.indIns.addActionListener(this);
+		this.indStp.addActionListener(this);
+		this.indCer.addActionListener(this);
+		this.exit.addActionListener(this);
+		
+		// Aggiungo componenti Inserimento rubrica
+		this.add(this.testoStp);
+		this.add(this.testoIns);
+		this.add(this.inNameRub);
+		this.add(this.invio);
+		this.add(this.invio_);
+		
+		this.invio.addActionListener(this);
+		this.invio_.addActionListener(this);
+		
+		// Aggiungo componenti Cerca
+		this.add(this.risultati);
+		this.add(this.infoCerca);
+		this.add(this.inCerca);
+		this.add(this.Cerca);
+		
+		this.Cerca.addActionListener(this);
+		
+		// Aggiungo componenti Input contatti
+		this.add(this.nome);
+		this.add(this.inNome);
+		this.add(this.Cognome);
+		this.add(this.inCognome);
+		this.add(this.Numero);
+		this.add(this.inNumero);
+		this.add(this.Indirizzo);
+		this.add(this.inIndirizzo);
+		this.add(this.ok);
+		this.add(this.reset);
+		this.add(this.savExit);
+		
+		this.ok.addActionListener(this);
+		this.reset.addActionListener(this);
+		this.savExit.addActionListener(this);
+		
+		// Aggiungo componenti Visualizzazione contatti
+		this.add(this.stmNome);
+		this.add(this.stmCognome);
+		this.add(this.stmNumero);
+		this.add(this.stmIndirizzo);
+		this.add(this.indietro);
+		this.add(this.back);
+		this.add(this.avanti);
+		this.indietro.setEnabled(false);
+		
+		this.avanti.addActionListener(this);
+		this.back.addActionListener(this);
+		this.indietro.addActionListener(this);
+		
+		// Setto i componenti per visualizzare la scherata di index
+		this.pannelloInput(false);
+		this.pannelloOutput(false);
+		this.pannelloRubIns(false);
+		this.pannelloCerca(false);
+		this.pannelloRisultati(false);
+		
+	}
+	
    public void actionPerformed(ActionEvent evt)
 		     {
 			   String nome = inNome.getText();
@@ -358,7 +388,10 @@ class PanelInserimento extends JPanel implements ActionListener
 				    {
 				     stringa = inCerca.getText();
 					 cont=0;
-					 con=0;
+					 // ----------------------------------
+					 // Variabile non usata
+					 // con=0;
+					 // ----------------------------------
 					 linee=0;
 					 cerca = new int[100];
 				     cerca(stringa,nameRub);
@@ -481,7 +514,10 @@ class PanelInserimento extends JPanel implements ActionListener
    void stampaRisultati(int nume,String nomeFile)
    {
        cont=0;
-       con=0;
+       // ----------------------------------
+		 // Variabile non usata
+		 // con=0;
+		 // ----------------------------------
        linee=0;
 	    try{
 	          fileL = new FileReader(nomeFile);
@@ -572,7 +608,7 @@ class PanelInserimento extends JPanel implements ActionListener
 	  {
 	  nome.setVisible(att);
 	  inNome.setVisible(att);
-	  Congome.setVisible(att);
+	  Cognome.setVisible(att);
 	  inCognome.setVisible(att);
 	  Numero.setVisible(att);
 	  inNumero.setVisible(att);

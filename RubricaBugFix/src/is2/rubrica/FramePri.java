@@ -4,8 +4,8 @@
  * @author Alenadri Enrico - III G
  * @date 6/02/2009
  * Fixed by:
- * "helloIAmPau - Pasquale Boemio <boemianrapsodi[at]gmail.com>"
- * "b3by" - Antonio Bevilacqua <b3by.in.th3.sky[at]gmail.com>"
+ * "helloIAmPau - Pasquale Boemio <pa.boemio[at]studenti.unina.it>"
+ * "b3by" - Antonio Bevilacqua <anto.bevilacqua[at]studenti.unina.it>"
  * ----------
  * This is the frame object showed by Rubrica.java.
  * We suppose the purpose of the author is to have an object representative of the view with 
@@ -32,7 +32,7 @@ class FramePri extends JFrame {
 	private static final long serialVersionUID = 5630246559558602437L;
 	// Ecco quanto dovra` essere grande il mio pannello!
 	public static final int DEFAULT_WIDTH = 300 ;
-    public static final int DEFAULT_HEIGHT = 245 ;
+	public static final int DEFAULT_HEIGHT = 245 ;
 	
     /**
      * This method builds the panel and puts it at location (xLoc,yLoc) on the screen. 
@@ -41,10 +41,10 @@ class FramePri extends JFrame {
      * @param yLoc : This is the location of the panel on the axis y
      */
 	public FramePri(int xLoc,int yLoc){
-		setSize(DEFAULT_WIDTH,DEFAULT_HEIGHT); // setta la dimensione
-		setTitle("Rubrica 2.0  by Aleandri Enrico"); // setta il titolo
-		setResizable(false); // non permettere all'utente di fare come cacchio gli pare
-		setLocation(xLoc,yLoc); // mettilo proprio li, aspe` un po` piu` a destra, ok!
+		this.setSize(FramePri.DEFAULT_WIDTH, FramePri.DEFAULT_HEIGHT); // setta la dimensione
+		this.setTitle("Rubrica 2.0  by Aleandri Enrico"); // setta il titolo
+		this.setResizable(false); // non permettere all'utente di fare come cacchio gli pare
+		this.setLocation(xLoc,yLoc); // mettilo proprio li, aspe` un po` piu` a destra, ok!
 		PanelInserimento panelIns = new PanelInserimento(); // crea il contenuto del pannello 
 		Container contentPane = getContentPane(); // prendi il contenitore
 		contentPane.add(panelIns); // in tavola!
