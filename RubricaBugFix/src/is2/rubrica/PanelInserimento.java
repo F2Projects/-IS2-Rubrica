@@ -234,211 +234,182 @@ class PanelInserimento extends JPanel implements ActionListener{
 		
 	}
 	
-   public void actionPerformed(ActionEvent evt)
-		     {
-			   String nome = inNome.getText();
-			   String cognome = inCognome.getText();
-			   String numero = inNumero.getText();
-			   String indirizzo = inIndirizzo.getText();
-			   String nameRub = inNameRub.getText();
-              boolean test;
-
-			   String command = evt.getActionCommand();
-			   command = command.toLowerCase();
-			 if(command.equals("<<"))
-			 			    {
-			 				  if(num>0)
-			 				    {
-			 					 num--;
-			 					 avanti.setEnabled(true);
-							    }
-
-			 			      if(num<0)
-			 			         indietro.setEnabled(false);
-
-							   letturaFile(nameRub);
-			 			       stampa();
+	public void actionPerformed(ActionEvent evt){
+		
+		String nome = inNome.getText();
+		String cognome = inCognome.getText();
+		String numero = inNumero.getText();
+		String indirizzo = inIndirizzo.getText();
+		String nameRub = inNameRub.getText();
+		boolean test;
+		
+		String command = evt.getActionCommand();
+		command = command.toLowerCase();
+		
+		if(command.equals("<<")){
+			if(this.num>0){
+				this.num--;
+				this.avanti.setEnabled(true);
+			}
+			if(this.num<0)
+				this.indietro.setEnabled(false);
+			
+			this.letturaFile(nameRub);
+			this.stampa();
+		}
+		if(command.equals(">>")){
+			if((this.num+1)*4<this.lineeStm){
+				this.num++;
+				this.indietro.setEnabled(true);
+			}
+			if((this.num+1)*4==this.lineeStm)
+				this.avanti.setEnabled(false);
+			
+			this.letturaFile(nameRub);
+			this.stampa();
+		}
+		if(command.equals("indietro")){
+			this.num=0;
+			this.risCerca="";
+			this.testoStp.setText("Inserisci il nome della rubrica        ");
+			this.testoIns.setText("Inserisci il nome con cui salvare la rubrica        ");
+			this.avanti.setEnabled(true);
+			this.indietro.setEnabled(false);
+			this.pannelloIndex(true);
+			this.pannelloInput(false);
+			this.pannelloOutput(false);
+			this.pannelloRubIns(false);
+			this.pannelloRubStp(false);
+			this.pannelloCerca(false);
+			this.pannelloRisultati(false);
+		}
+		if(command.equals("add")){
+			try{
+				this.scrittura.println(nome);
+				this.scrittura.println(cognome);
+				this.scrittura.println(numero);
+				this.scrittura.println(indirizzo);
+			} 
+			catch(NullPointerException ex){
+				System.out.println("File insesistente...                        ");
+			}
+			
+			this.reset();
+		}
+		if(command.equals("invio")){
+			test=true;
+			
+			if(nameRub.equals(""))
+				test=true;
+			
+			this.exFile = new File(nameRub);
+			if( ((this.exFile).exists()) || (test==false)){
+				this.inNameRub.setText("");
+				if(test==false)
+					this.testoIns.setText("Nome File non corretto.Riprova                        ");
+				else
+					// Carattere UTF8 non codificato 
+					//this.testoIns.setText("File già esistente. Riprova                         ");
+					this.testoIns.setText("File giˆ esistente. Riprova                         ");
 				}
-			 if(command.equals(">>"))
-			    {
-				  if((num+1)*4<lineeStm)
-				    {
-					 num++;
-					 indietro.setEnabled(true);
-				    }
-			      if((num+1)*4==lineeStm)
-			         avanti.setEnabled(false);
-
-					 letturaFile(nameRub);
-			         stampa();
-				}
-			 if(command.equals("indietro"))
-			    {
-                num=0;
-                risCerca="";
-                testoStp.setText("Inserisci il nome della rubrica        ");
-                testoIns.setText("Inserisci il nome con cui salvare la rubrica        ");
-                avanti.setEnabled(true);
-                indietro.setEnabled(false);
-				 pannelloIndex(true);
-				 pannelloInput(false);
-	             pannelloOutput(false);
-				 pannelloRubIns(false);
-				 pannelloRubStp(false);
-				 pannelloCerca(false);
-				 pannelloRisultati(false);
-
-				}
-	         if(command.equals("add"))
-	            {
+			else{
+				pannelloRubIns(false);
+				pannelloInput(true);
 				try{
-			         scrittura.println(nome);
-			         scrittura.println(cognome);
-			         scrittura.println(numero);
-			         scrittura.println(indirizzo);
-                 }catch(NullPointerException ex)
-                  {
- 	                System.out.println("File insesistente...                        ");
-	             }
-                    reset();
-
-			    }
-
-			  if(command.equals("invio"))
-			  			    {
-			  					test=true;
-
-			                      if(nameRub.equals(""))
-			                           test=true;
-			  		             exFile = new File(nameRub);
-			  		             if( ((exFile).exists()) || (test==false))
-			  		               {
-			  		                inNameRub.setText("");
-			  		                if(test==false)
-			  		                   testoIns.setText("Nome File non corretto.Riprova                        ");
-			  		                else
-
-			  		                   testoIns.setText("File già esistente. Riprova                         ");
-			  					    }
-			  					 else
-			  					   {
-
-			  					   pannelloRubIns(false);
-			  	                   pannelloInput(true);
-			  	                    try{
-			  					             fileS = new FileOutputStream(nameRub);
-			  					             scrittura = new PrintStream(fileS);
-			  					        }catch(FileNotFoundException ex)
-			  					        {
-			  					    	   System.out.println("Errore in lettura File...");
-			  	                        }
-
-			  					   }
-
-
+					this.fileS = new FileOutputStream(nameRub);
+					this.scrittura = new PrintStream(this.fileS);
 				}
-
-				if(command.equals("invio "))
-							    {
-									test=true;
-
-				                    if(nameRub.equals(""))
-				                         test=false;
-						             exFile = new File(nameRub);
-						             if( ((exFile).exists()) && (test==true))
-						               {
-										letturaFile(nameRub);
-										stampa();
-				  					    pannelloRubStp(false);
-					                    pannelloOutput(true);
-
-						                }
-									 else
-									   {
-										inNameRub.setText("");
-						                if(test==false)
-						                   testoStp.setText("Nome File non corretto.Riprova!                       ");
-						                else
-
-						                   testoStp.setText("File non esistente. Riprova!                        ");
-									    }
-
-
+				catch(FileNotFoundException ex){
+					System.out.println("Errore in lettura File...");
 				}
-
-		      if(command.equals("reset"))
-		        {
-				 reset();
+			}
+		}
+		if(command.equals("invio ")){
+			test=true;
+			
+			if(nameRub.equals(""))
+				test=false;
+			
+			this.exFile = new File(nameRub);
+			if( ((this.exFile).exists()) && (test==true)){
+				this.letturaFile(nameRub);
+				this.stampa();
+				this.pannelloRubStp(false);
+				this.pannelloOutput(true);
+			}
+			else{
+				this.inNameRub.setText("");
+				if(test==false)
+					this.testoStp.setText("Nome File non corretto.Riprova!                       ");
+				else
+					testoStp.setText("File non esistente. Riprova!                        ");
+			}
+		}
+		if(command.equals("reset")){
+			this.reset();
+		}
+		if(command.equals("save & back")){
+			this.pannelloInput(false);
+			this.pannelloRubIns(false);
+			this.pannelloRubStp(false);
+			this.pannelloIndex(true);
+			this.pannelloOutput(false);
+		}
+		if(command.equals("cerca")){
+			test=true;
+			
+			if(nameRub.equals(""))
+				test=false;
+			
+			this.exFile = new File(nameRub);
+			if( ((this.exFile).exists()) && (test==true)){
+				this.stringa = this.inCerca.getText();
+				this.cont=0;
+				// ----------------------------------
+				// Variabile non usata
+				// con=0;
+				// ----------------------------------
+				this.linee=0;
+				this.cerca = new int[100];
+				this.cerca(this.stringa,nameRub);
+				this.i=0;
+				if(this.cerca[0]==0) {
+					do {
+						this.stampaRisultati(this.cerca[this.i]-1,nameRub);
+						this.i++;
+					} while(this.cerca[this.i]!=0);
+				}else{
+					this.risCerca="Nessun contatto trovato!!";
 				}
-		     if(command.equals("save & back"))
-		        {
-	             pannelloInput(false);
-	             pannelloRubIns(false);
-	             pannelloRubStp(false);
-	             pannelloIndex(true);
-	             pannelloOutput(false);
-			    }
-			 if(command.equals("cerca"))
-			   {
-				 test=true;
-				 if(nameRub.equals(""))
-                  test=false;
-		         exFile = new File(nameRub);
-                if( ((exFile).exists()) && (test==true))
-				    {
-				     stringa = inCerca.getText();
-					 cont=0;
-					 // ----------------------------------
-					 // Variabile non usata
-					 // con=0;
-					 // ----------------------------------
-					 linee=0;
-					 cerca = new int[100];
-				     cerca(stringa,nameRub);
-				     i=0;
-                    if(cerca[0]==0)
-                      {
-					    do{
-					       stampaRisultati(cerca[i]-1,nameRub);
-					       i++;
-	                    }while(cerca[i]!=0);
-					 }else{
-					   risCerca="Nessun contatto trovato!!";
-				     }
-	                 risultati.setText(risCerca);
-	                 pannelloCerca(false);
-	                 pannelloRisultati(true);
-				 }else{
-		 			 inNameRub.setText("");
-					 if(test==false)
-					    testoStp.setText("Nome File non corretto.Riprova!                       ");
-					 else
-					    testoStp.setText("File non esistente. Riprova!                        ");
-			     }
-
-
-			   }
-		     if(command.equals("Esci"))
-		        {
-	             System.exit(0);
-			    }
-			  if(command.equals("crea rubrica"))
-			    {
-	             pannelloRubIns(true);
-	             pannelloIndex(false);
-				}
-			  if(command.equals("visualizza contatti"))
-			    {
-               pannelloRubStp(true);
-               pannelloIndex(false);
-				}
-             if(command.equals("cerca contatti"))
-              {
-				 pannelloIndex(false);
-				 pannelloCerca(true);
-			   }
-			 }
-   void letturaFile(String nomeFile)
+				this.risultati.setText(this.risCerca);
+				this.pannelloCerca(false);
+				this.pannelloRisultati(true);
+			}else{
+				this.inNameRub.setText("");
+				if(test==false)
+					this.testoStp.setText("Nome File non corretto.Riprova!                       ");
+				else
+					this.testoStp.setText("File non esistente. Riprova!                        ");
+			}
+		}
+		if(command.equals("Esci")){
+			System.exit(0);
+		}
+		if(command.equals("crea rubrica")){
+			this.pannelloRubIns(true);
+			this.pannelloIndex(false);
+		}
+		if(command.equals("visualizza contatti")){
+			this.pannelloRubStp(true);
+			this.pannelloIndex(false);
+		}
+		if(command.equals("cerca contatti")) {
+			this.pannelloIndex(false);
+			this.pannelloCerca(true);
+		}
+	}
+   
+	void letturaFile(String nomeFile)
       {
 		  int cont=0;
 		  lineeStm=0;
