@@ -24,7 +24,7 @@ package is2.rubrica;
 import java.awt.Container;
 import javax.swing.JFrame;
 
-class FramePri extends JFrame {
+public class FramePri extends JFrame {
 	
     // L'oggetto JFrame e` un oggetto "Serializable". Poiche` abbiamo seri problemi,
 	// preferiamo eliminare anche tutti i "warning" presenti nel codice, e quindi 

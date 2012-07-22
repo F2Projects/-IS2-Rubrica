@@ -12,6 +12,7 @@
  * 1. indentation
  * 2. added some inline documentation
  * 3. added the serialVersionUID (not necessary)
+ * 4. converted TextField objects in JTextField (frow AWT to Swing)
  * 
  * NB: Some class or variables name are edited in order to respect the standard "camel notation"
  * to make this source code more readable. 
@@ -19,7 +20,6 @@
 package is2.rubrica;
 
 import java.awt.TextArea;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -33,8 +33,9 @@ import java.io.PrintStream;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-class PanelInserimento extends JPanel implements ActionListener{
+public class PanelInserimento extends JPanel implements ActionListener{
 
     // L'oggetto JFrame e` un oggetto "Serializable". Poiche` abbiamo seri problemi,
 	// preferiamo eliminare anche tutti i "warning" presenti nel codice, e quindi 
@@ -64,7 +65,7 @@ class PanelInserimento extends JPanel implements ActionListener{
 	// 	nameRub;
 	// ----------------------------------
 	
-	private TextField inNome,
+	private JTextField inNome,
 			inCognome,
 			inNumero,
 			inIndirizzo,
@@ -125,14 +126,22 @@ class PanelInserimento extends JPanel implements ActionListener{
 		// Componenti inserimento nome Rubrica-inserimento scherda/stampa scheda
 		this.testoIns = new JLabel("Inserisci il nome con cui salvare la rubrica        ");
 		this.testoStp = new JLabel("Inserisci il nome della rubrica        ");
-		this.inNameRub = new TextField(10);
+		this.inNameRub = new JTextField(10);
+		// ----------------------------------
+		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
+		this.inNameRub.setName("inNameRub");
+		// ----------------------------------
 		this.invio = new JButton("Invio");
 		this.invio_ = new JButton("Invio ");
 		
 		// Componenti Cerca
 		this.Cerca = new JButton("Cerca");
 		this.infoCerca = new JLabel("Puoi cercare per Nome-Cognome-Numero-indirizzo");
-		this.inCerca = new TextField(10);
+		this.inCerca = new JTextField(10);
+		// ----------------------------------
+		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
+		this.inCerca.setName("inCerca");
+		// ----------------------------------
 		this.risultati = new TextArea(10,35);
 		this.risultati.setEditable(false);
 		this.risultati.setCaretPosition(0);
@@ -145,10 +154,16 @@ class PanelInserimento extends JPanel implements ActionListener{
 		this.ok = new JButton("Add");
 		this.reset = new JButton("Reset");
 		this.savExit = new JButton("Save & Back");
-		this.inNome = new TextField(17);
-		this.inCognome = new TextField(17);
-		this.inNumero = new TextField(17);
-		this.inIndirizzo = new TextField(17);
+		this.inNome = new JTextField(17);
+		this.inCognome = new JTextField(17);
+		this.inNumero = new JTextField(17);
+		this.inIndirizzo = new JTextField(17);
+		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
+		this.inNome.setName("inNome");
+		this.inCognome.setName("inCognome");
+		this.inNumero.setName("inNumero");
+		this.inIndirizzo.setName("inIndirizzo");
+		// ----------------------------------
 		
 		// Componenti stampa Scheda
 		this.stmNome = new JLabel("Nome:");
