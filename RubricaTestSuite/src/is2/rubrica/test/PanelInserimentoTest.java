@@ -1,7 +1,5 @@
 package is2.rubrica.test;
 
-import java.awt.Component;
-
 import org.uispec4j.UISpecTestCase;
 import org.uispec4j.Window;
 import org.uispec4j.interception.MainClassAdapter;
@@ -15,15 +13,17 @@ public class PanelInserimentoTest extends UISpecTestCase {
 	}
 	
 	public void testGoToPannelloCerca() {
-		this.pannelloIndexVisible(true);
-		for (Component c : this.getMainWindow().getAwtComponent().getComponents())
-			System.out.println(c.getName());
-		this.getMainWindow().getButton("Cerca Contatti").click();
-		this.pannelloIndexVisible(false);
-		this.pannelloCercaVisible(true);
-		this.getMainWindow().getButton("Indietro").click();
-		this.pannelloIndexVisible(true);
-		this.pannelloCercaVisible(false);
+		pannelloIndexVisible(true);
+		
+		getMainWindow().getButton("Cerca Contatti").click();
+		
+		pannelloIndexVisible(false);
+		pannelloCercaVisible(true);
+		
+		getMainWindow().getButton("Indietro").click();
+		
+		pannelloIndexVisible(true);
+		pannelloCercaVisible(false);
 	}
 	
 	private void pannelloIndexVisible(boolean att) {
@@ -47,25 +47,28 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		assertEquals(att, window.getButton("Indietro").isVisible());
 	}
    
-//	void pannelloRisultati(boolean att) {
-//		this.risultati.setVisible(att);
-//		this.back.setVisible(att);
-//	}
-//	
-//	void pannelloInput(boolean att) {
-//		this.nome.setVisible(att);
-//		this.inNome.setVisible(att);
-//		this.Cognome.setVisible(att);
-//		this.inCognome.setVisible(att);
-//		this.Numero.setVisible(att);
-//		this.inNumero.setVisible(att);
-//		this.Indirizzo.setVisible(att);
-//		this.inIndirizzo.setVisible(att);
-//		
-//		this.ok.setVisible(att);
-//		this.reset.setVisible(att);
-//		this.savExit.setVisible(att);
-//	}
+	private void pannelloRisultatiVisible(boolean att) {
+		Window window = getMainWindow();
+		assertEquals(att, window.getTextBox("risultati").isVisible());
+		assertEquals(att, window.getButton("Indietro").isVisible());
+	}
+
+	private void pannelloInput(boolean att) {
+		Window window = getMainWindow();
+		assertEquals(att, window.getTextBox("                Nome").isVisible());
+		assertEquals(att, window.getTextBox("inNome").isVisible());
+		assertEquals(att, window.getTextBox("                Cognome").isVisible());
+		assertEquals(att, window.getTextBox("inCognome").isVisible());
+		assertEquals(att, window.getTextBox("                Numero Casa").isVisible());
+		assertEquals(att, window.getTextBox("inNumero").isVisible());
+		assertEquals(att, window.getTextBox("                Indirizzo").isVisible());
+		assertEquals(att, window.getTextBox("inIndirizzo").isVisible());
+		
+		assertEquals(att, window.getButton("Add").isVisible());
+		assertEquals(att, window.getButton("Reset").isVisible());
+		assertEquals(att, window.getButton("Save & Back").isVisible());
+
+	}
 //	
 //	void pannelloOutput(boolean att) {
 //		this.stmNome.setVisible(att);

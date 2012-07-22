@@ -143,6 +143,10 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		this.inCerca.setName("inCerca");
 		// ----------------------------------
 		this.risultati = new TextArea(10,35);
+		// ----------------------------------
+		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
+		this.risultati.setName("risultati");
+		// ----------------------------------
 		this.risultati.setEditable(false);
 		this.risultati.setCaretPosition(0);
 		
