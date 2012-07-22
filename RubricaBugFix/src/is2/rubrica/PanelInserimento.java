@@ -413,222 +413,200 @@ class PanelInserimento extends JPanel implements ActionListener{
    
 	void letturaFile(String nomeFile) {
 		  int cont=0;
-		  lineeStm=0;
-
-     try{
-        fileL = new FileReader(nomeFile);
-        lettura = new BufferedReader(fileL);
-
-        while( (linea = lettura.readLine()) != null )
-	        {
-	   		 lineeStm++;
-	        }
-
-        fileL = new FileReader(nomeFile);
-        lettura = new BufferedReader(fileL);
-
-           while( cont<num*4 )
-	          {
-		   	   cont++;
-	   		   linea = lettura.readLine();
-	        }
-
-    }catch(FileNotFoundException ex)
-	 {
-	  System.out.println("Errore in lettura file, Nessun file trovato!");
-	 }
-	 catch(IOException ex)
-	 {
-	  System.out.println("Errore in lettura file..");
-	 }
-
-	   }
-
-    void cerca(String stringRicerca,String nomeFile)
-    {
-     i=0;
-	  try{
-	      fileL = new FileReader(nomeFile);
-		  lettura= new BufferedReader(fileL);
-		  while( (linea = lettura.readLine()) != null )
-		    {
-		     linee++;
-		    }
-		  fileL = new FileReader(nomeFile);
-		  lettura = new BufferedReader(fileL);
-		  num=1;
-		  do{
-		     while( cont<num*4 )
-		       {
-		     	cont++;
-			    linea = lettura.readLine();
-			    if(linea != null)
-			      {
-			       if(linea.equals(stringRicerca))
-				     {
-				      cerca[i]=num;
-				      i++;
-			         }
-				  }
-	           }
-	           num++;
-		 }while(cont<linee);
-	 }catch(FileNotFoundException ex)
-    {
-     System.out.println("Errore in lettura file..");
-    }catch(IOException ex)
-    {
-     System.out.println("Errore in lettura file..");
-    }
+		  this.lineeStm=0;
+		  
+		  try {
+			  this.fileL = new FileReader(nomeFile);
+			  this.lettura = new BufferedReader(this.fileL);
+			  
+			  while( (this.linea = this.lettura.readLine()) != null )
+				  this.lineeStm++;
+			  
+			  this.fileL = new FileReader(nomeFile);
+			  this.lettura = new BufferedReader(fileL);
+			  
+			  while( cont < this.num*4 ) {
+				  cont++;
+				  this.linea = this.lettura.readLine();
+			  }
+		  }
+		  catch(FileNotFoundException ex) {
+			  System.out.println("Errore in lettura file, Nessun file trovato!");
+		  }
+		  catch(IOException ex) {
+			  System.out.println("Errore in lettura file..");
+		  }
+	}
+	
+	void cerca(String stringRicerca,String nomeFile) {
+		this.i=0;
+		
+		try{
+			this.fileL = new FileReader(nomeFile);
+			this.lettura= new BufferedReader(this.fileL);
+			
+			while( (this.linea = this.lettura.readLine()) != null ) {
+				this.linee++;
+			}
+			
+			this.fileL = new FileReader(nomeFile);
+			this.lettura = new BufferedReader(this.fileL);
+			this.num=1;
+			do {
+				while( this.cont < this.num*4 ) {
+					this.cont++;
+					this.linea = this.lettura.readLine();
+					if( this.linea != null) {
+						if(this.linea.equals(stringRicerca)) {
+							this.cerca[this.i] = this.num;
+							this.i++;
+						}
+					}
+				}
+				this.num++;
+			}
+			while(this.cont < this.linee);
+		}
+		catch(FileNotFoundException ex) {
+			System.out.println("Errore in lettura file..");
+		}
+		catch(IOException ex) {
+			System.out.println("Errore in lettura file..");
+		}
+	}
+	
+	void stampaRisultati(int nume,String nomeFile) {
+		this.cont=0;
+		// ----------------------------------
+		// Variabile non usata
+		// con=0;
+		// ----------------------------------
+		this.linee=0;
+		try{
+			this.fileL = new FileReader(nomeFile);
+			this.lettura = new BufferedReader(this.fileL);
+			
+			while( (this.linea = this.lettura.readLine()) != null ) {
+				this.linee++;
+			}
+			
+			this.fileL = new FileReader(nomeFile);
+			this.lettura = new BufferedReader(this.fileL);
+			
+			while(this.cont<nume*4) {
+				this.linea = this.lettura.readLine();
+				this.cont++;
+			}
+			
+			this.linea = this.lettura.readLine();
+			this.risCerca += "Nome: " + this.linea;
+			
+			this.linea = this.lettura.readLine();
+			this.risCerca += "\nCognome: " + this.linea;
+			
+			this.linea = this.lettura.readLine();
+			this.risCerca += "\nNumero Casa: " + this.linea;
+			
+			this.linea = this.lettura.readLine();
+			this.risCerca += "\nIndirizzo: " + this.linea + "\n\n";
+		}
+		catch(FileNotFoundException ex) {
+			System.out.println("Errore in lettura file..");
+		}
+		catch(IOException ex) { 
+			System.out.println("Errore in lettura file..");
+		}
 	}
 
-
-   void stampaRisultati(int nume,String nomeFile)
-   {
-       cont=0;
-       // ----------------------------------
-		 // Variabile non usata
-		 // con=0;
-		 // ----------------------------------
-       linee=0;
-	    try{
-	          fileL = new FileReader(nomeFile);
-	          lettura = new BufferedReader(fileL);
-
-	           while( (linea = lettura.readLine()) != null )
-	 	         {
-	 	   	  	  linee++;
-	 	          }
-	           fileL = new FileReader(nomeFile);
-	           lettura = new BufferedReader(fileL);
-	           while(cont<nume*4){
-	 	   		   linea = lettura.readLine();
-	 		   	   cont++;
-	 	          }
-
-	 			linea = lettura.readLine();
-	 			  risCerca+="Nome: "+linea;
-
-	 			linea = lettura.readLine();
-	 			  risCerca+="\nCognome: "+linea;
-
-	 			linea = lettura.readLine();
-	 			  risCerca+="\nNumero Casa: "+linea;
-
-	 			linea = lettura.readLine();
-	 			  risCerca+="\nIndirizzo: "+linea+"\n\n";
-
-	      }catch(FileNotFoundException ex)
-	 	 {
-	 	  System.out.println("Errore in lettura file..");
-	 	 }
-	 	 catch(IOException ex)
-	 	 {
-	 	  System.out.println("Errore in lettura file..");
-	      }
-
+	void stampa() {
+		
+		try {
+			this.linea = this.lettura.readLine();
+			this.stmNome.setText("                        Nome :  " + this.linea + "                                            ");
+			this.linea = this.lettura.readLine();
+			this.stmCognome.setText("                        Cognome :  " + this.linea + "                                  ");
+			this.linea = this.lettura.readLine();
+			this.stmNumero.setText("                         Numero :  " + this.linea + "                                  ");
+			this.linea = this.lettura.readLine();
+			this.stmIndirizzo.setText("                        Indirizzo :  " + this.linea + "                                  ");
+		}
+		catch(IOException ex) {
+			System.out.println("Errore in stampa Dati File.....");
+		} 
+		catch(NullPointerException ex) {
+			System.out.println("Nessun file ricevuto...");
+		}
 	}
-
-	void stampa()
-	  {
-	try{
-         linea = lettura.readLine();
-       stmNome.setText("                        Nome :  "+linea+"                                            ");
-
-	  	  linea = lettura.readLine();
-	    stmCognome.setText("                        Cognome :  "+linea+"                                  ");
-
-		  linea = lettura.readLine();
-       stmNumero.setText("                         Numero :  "+linea+"                                  ");
-
-		  linea = lettura.readLine();
-       stmIndirizzo.setText("                        Indirizzo :  "+linea+"                                  ");
-   }catch(IOException ex)
-   {
-	  System.out.println("Errore in stampa Dati File.....");
-	}catch(NullPointerException ex)
-	{
-     System.out.println("Nessun file ricevuto...");
+	
+	void reset() {
+		this.inNome.setText("");
+		this.inCognome.setText("");
+		this.inNumero.setText("");
+		this.inIndirizzo.setText("");
 	}
-
-	  }
-
-   void reset()
-     {
-		inNome.setText("");
-		inCognome.setText("");
-		inNumero.setText("");
-		inIndirizzo.setText("");
-	  }
-
-	 void pannelloCerca(boolean att)
-	   {
-		testoStp.setVisible(att);
-		inNameRub.setVisible(att);
-		infoCerca.setVisible(att);
-		inCerca.setVisible(att);
+	
+	void pannelloCerca(boolean att) {
+		this.testoStp.setVisible(att);
+		this.inNameRub.setVisible(att);
+		this.infoCerca.setVisible(att);
+		this.inCerca.setVisible(att);
 		Cerca.setVisible(att);
 		back.setVisible(att);
-
 	   }
-   void pannelloRisultati(boolean att)
-     {
-	   risultati.setVisible(att);
-	   back.setVisible(att);
-	  }
-	 void pannelloInput(boolean att)
-	  {
-	  nome.setVisible(att);
-	  inNome.setVisible(att);
-	  Cognome.setVisible(att);
-	  inCognome.setVisible(att);
-	  Numero.setVisible(att);
-	  inNumero.setVisible(att);
-	  Indirizzo.setVisible(att);
-	  inIndirizzo.setVisible(att);
-
-	  ok.setVisible(att);
-	  reset.setVisible(att);
-	  savExit.setVisible(att);
-
-	  }
-	 void pannelloOutput(boolean att)
-	  {
-      stmNome.setVisible(att);
-	   stmCognome.setVisible(att);
-      stmNumero.setVisible(att);
-	   stmIndirizzo.setVisible(att);
-	   avanti.setVisible(att);
-	   back.setVisible(att);
-      indietro.setVisible(att);
-	  }
-	  void pannelloRubIns(boolean att)
-	   {
-		testoStp.setVisible(false);
-	    testoIns.setVisible(att);
-	    inNameRub.setVisible(att);
-	    invio.setVisible(att);
-	    invio_.setVisible(false);
-	   }
-
-	  void pannelloRubStp(boolean att)
-	   {
-		testoIns.setVisible(false);
-	    testoStp.setVisible(att);
-	    inNameRub.setVisible(att);
-	    invio.setVisible(false);
-	    invio_.setVisible(att);
-	    back.setVisible(att);
-	   }
-	  void pannelloIndex(boolean att)
-	   {
-
-        index.setVisible(att);
-        indIns.setVisible(att);
-        indStp.setVisible(att);
-        indCer.setVisible(att);
-        exit.setVisible(att);
-        spazio.setVisible(att);
-      }
-
+   
+	void pannelloRisultati(boolean att) {
+		this.risultati.setVisible(att);
+		this.back.setVisible(att);
+	}
+	
+	void pannelloInput(boolean att) {
+		this.nome.setVisible(att);
+		this.inNome.setVisible(att);
+		this.Cognome.setVisible(att);
+		this.inCognome.setVisible(att);
+		this.Numero.setVisible(att);
+		this.inNumero.setVisible(att);
+		this.Indirizzo.setVisible(att);
+		this.inIndirizzo.setVisible(att);
+		
+		this.ok.setVisible(att);
+		this.reset.setVisible(att);
+		this.savExit.setVisible(att);
+	}
+	
+	void pannelloOutput(boolean att) {
+		this.stmNome.setVisible(att);
+		this.stmCognome.setVisible(att);
+		this.stmNumero.setVisible(att);
+		this.stmIndirizzo.setVisible(att);
+		this.avanti.setVisible(att);
+		this.back.setVisible(att);
+		this.indietro.setVisible(att);
+	}
+	
+	void pannelloRubIns(boolean att) {
+		this.testoStp.setVisible(false);
+		this.testoIns.setVisible(att);
+		this.inNameRub.setVisible(att);
+		this.invio.setVisible(att);
+		this.invio_.setVisible(false);
+	}
+	
+	void pannelloRubStp(boolean att) {
+		this.testoIns.setVisible(false);
+		this.testoStp.setVisible(att);
+		this.inNameRub.setVisible(att);
+		this.invio.setVisible(false);
+		this.invio_.setVisible(att);
+		this.back.setVisible(att);
+	}
+	
+	void pannelloIndex(boolean att) {
+		this.index.setVisible(att);
+		this.indIns.setVisible(att);
+		this.indStp.setVisible(att);
+		this.indCer.setVisible(att);
+		this.exit.setVisible(att);
+		this.spazio.setVisible(att);
+	}
 }
