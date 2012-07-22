@@ -308,9 +308,11 @@ class PanelInserimento extends JPanel implements ActionListener{
 				if(test==false)
 					this.testoIns.setText("Nome File non corretto.Riprova                        ");
 				else
+					// ----------------------------------
 					// Carattere UTF8 non codificato 
 					//this.testoIns.setText("File già esistente. Riprova                         ");
 					this.testoIns.setText("File giˆ esistente. Riprova                         ");
+					// ----------------------------------
 				}
 			else{
 				pannelloRubIns(false);
@@ -409,8 +411,7 @@ class PanelInserimento extends JPanel implements ActionListener{
 		}
 	}
    
-	void letturaFile(String nomeFile)
-      {
+	void letturaFile(String nomeFile) {
 		  int cont=0;
 		  lineeStm=0;
 
