@@ -1,9 +1,9 @@
 package is2.rubrica.test;
 
+import is2.rubrica.Rubrica;
 import org.uispec4j.UISpecTestCase;
 import org.uispec4j.Window;
 import org.uispec4j.interception.MainClassAdapter;
-import is2.rubrica.Rubrica;
 
 public class PanelInserimentoTest extends UISpecTestCase {
 	
@@ -24,37 +24,48 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		
 		pannelloIndexVisible(true);
 		pannelloCercaVisible(false);
+	
 	}
 	
 	private void pannelloIndexVisible(boolean att) {
 		Window window = getMainWindow();
-		assertEquals(att, window.getTextBox("       Cosa vuoi fare?                                    ").isVisible());
+		
+		assertEquals(att, window.getTextBox("index").isVisible());
+		
 		assertEquals(att, window.getButton("Crea rubrica").isVisible());
 		assertEquals(att, window.getButton("Visualizza contatti").isVisible());
 		assertEquals(att, window.getButton("Cerca Contatti").isVisible());
 		assertEquals(att, window.getButton("esci").isVisible());
+		
 		assertEquals(att, window.getTextBox("                              ").isVisible());
 
 	}
 	
 	private void pannelloCercaVisible(boolean att) {
 		Window window = getMainWindow();
-		assertEquals(att, window.getTextBox("Inserisci il nome della rubrica        ").isVisible());
+		
+		assertEquals(att, window.getTextBox("testoStp").isVisible());
 		assertEquals(att, window.getTextBox("inNameRub").isVisible());
-		assertEquals(att, window.getTextBox("Puoi cercare per Nome-Cognome-Numero-indirizzo").isVisible());
+		assertEquals(att, window.getTextBox("infoCerca").isVisible());
 		assertEquals(att, window.getTextBox("inCerca").isVisible());
+		
 		assertEquals(att, window.getButton("Cerca").isVisible());
 		assertEquals(att, window.getButton("Indietro").isVisible());
+	
 	}
    
 	private void pannelloRisultatiVisible(boolean att) {
 		Window window = getMainWindow();
+		
 		assertEquals(att, window.getTextBox("risultati").isVisible());
+		
 		assertEquals(att, window.getButton("Indietro").isVisible());
+	
 	}
 
-	private void pannelloInput(boolean att) {
+	private void pannelloInputVisible(boolean att) {
 		Window window = getMainWindow();
+		
 		assertEquals(att, window.getTextBox("                Nome").isVisible());
 		assertEquals(att, window.getTextBox("inNome").isVisible());
 		assertEquals(att, window.getTextBox("                Cognome").isVisible());
@@ -69,34 +80,47 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		assertEquals(att, window.getButton("Save & Back").isVisible());
 
 	}
-//	
-//	void pannelloOutput(boolean att) {
-//		this.stmNome.setVisible(att);
-//		this.stmCognome.setVisible(att);
-//		this.stmNumero.setVisible(att);
-//		this.stmIndirizzo.setVisible(att);
-//		this.avanti.setVisible(att);
-//		this.back.setVisible(att);
-//		this.indietro.setVisible(att);
-//	}
-//	
-//	void pannelloRubIns(boolean att) {
-//		this.testoStp.setVisible(false);
-//		this.testoIns.setVisible(att);
-//		this.inNameRub.setVisible(att);
-//		this.invio.setVisible(att);
-//		this.invio_.setVisible(false);
-//	}
-//	
-//	void pannelloRubStp(boolean att) {
-//		this.testoIns.setVisible(false);
-//		this.testoStp.setVisible(att);
-//		this.inNameRub.setVisible(att);
-//		this.invio.setVisible(false);
-//		this.invio_.setVisible(att);
-//		this.back.setVisible(att);
-//	}
-//	
+	
+	private void pannelloOutputVisible(boolean att) {
+		Window window = getMainWindow();
+		
+		assertEquals(att, window.getTextBox("Nome:").isVisible());
+		assertEquals(att, window.getTextBox("Cognome:").isVisible());
+		assertEquals(att, window.getTextBox("Numero:").isVisible());
+		assertEquals(att, window.getTextBox("Indirizzo:").isVisible());
+
+		assertEquals(att, window.getButton(">>").isVisible());
+		assertEquals(att, window.getButton("Indietro").isVisible());
+		assertEquals(att, window.getButton("<<").isVisible());
+		
+	}
+	
+	private void pannelloRubInsVisible(boolean att) {
+		Window window = getMainWindow();
+		
+		assertEquals(att, window.getTextBox("testoStp").isVisible());
+		assertEquals(att, window.getTextBox("testoIns").isVisible());
+		assertEquals(att, window.getTextBox("inNameRub").isVisible());
+
+		assertEquals(att, window.getButton("Invio").isVisible());
+		assertFalse(window.getButton("Invio ").isVisible());
+		assertEquals(att, window.getButton("Indietro").isVisible());
+
+	}
+	
+	private void pannelloRubStp(boolean att) {
+		Window window = getMainWindow();
+
+		assertFalse(window.getTextBox("testoIns").isVisible());
+		assertEquals(att, window.getTextBox("testoStp").isVisible());
+		assertEquals(att, window.getTextBox("inNameRub").isVisible());
+		
+		assertEquals(att, window.getButton("Invio ").isVisible());
+		assertFalse(window.getButton("Invio").isVisible());
+		assertEquals(att, window.getButton("Indietro").isVisible());
+
+	}
+	
 
 
 }

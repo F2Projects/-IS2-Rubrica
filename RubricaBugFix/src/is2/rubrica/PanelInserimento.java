@@ -119,6 +119,10 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		
 		// Componenti Index
 		this.index = new JLabel("       Cosa vuoi fare?                                    ");
+		// ----------------------------------
+		// Per poter fare testing, sono stati aggiunti i nomi ad alcune JLabel
+		this.index.setName("index");
+		// ----------------------------------
 		this.indIns = new JButton("Crea rubrica");
 		this.indStp = new JButton("Visualizza contatti");
 		this.indCer = new JButton("Cerca Contatti");
@@ -126,6 +130,11 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		// Componenti inserimento nome Rubrica-inserimento scherda/stampa scheda
 		this.testoIns = new JLabel("Inserisci il nome con cui salvare la rubrica        ");
 		this.testoStp = new JLabel("Inserisci il nome della rubrica        ");
+		// ----------------------------------
+		// Per poter fare testing, sono stati aggiunti i nomi ad alcune JLabel
+		this.testoStp.setName("testoStp");
+		this.testoIns.setName("testoIns");
+		// ----------------------------------
 		this.inNameRub = new JTextField(10);
 		// ----------------------------------
 		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
@@ -137,6 +146,10 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		// Componenti Cerca
 		this.Cerca = new JButton("Cerca");
 		this.infoCerca = new JLabel("Puoi cercare per Nome-Cognome-Numero-indirizzo");
+		// ----------------------------------
+		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
+		this.infoCerca.setName("infoCerca");
+		// ----------------------------------
 		this.inCerca = new JTextField(10);
 		// ----------------------------------
 		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
