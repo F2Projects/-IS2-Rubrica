@@ -6,4 +6,4 @@
 *.ear
 
 # Add libs #
-!IS2-Rubrica/RubricaTestSuite/lib/*
+!RubricaTestSuite/lib/*
