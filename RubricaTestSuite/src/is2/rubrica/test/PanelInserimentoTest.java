@@ -148,7 +148,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 	}
 
 	/**
-	 * Testing if the user inserts contacts
+	 * Testing if the user inserts contacts (check the add and the reset operations)
 	 * @throws FileNotFoundException 
 	 */
 	public void testAddContacts() throws Exception{
@@ -171,12 +171,20 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		
 		getMainWindow().getButton("Add").click();
 		
-		// controllo che sia stato inserito il contatto correttamente
+		// inserisco un altro contatto
+		getMainWindow().getTextBox("inNome").setText(contatto[0]);
+		getMainWindow().getTextBox("inCognome").setText(contatto[1]);
+		getMainWindow().getTextBox("inNumero").setText(contatto[2]);
+		getMainWindow().getTextBox("inIndirizzo").setText(contatto[3]);
+		
+		getMainWindow().getButton("Add").click();
+		
+		// controllo che siano stati inseriti i contatti correttamente
 		BufferedReader fileReader = new BufferedReader(new FileReader(new File(this.thisTestRubName)));
 		String linea;
 		int index=0;
 		while((linea = fileReader.readLine()) != null) 
-			assertEquals(contatto[index++], linea);
+			assertEquals(contatto[index++ % 4], linea);
 		
 		// inserisco di nuovo il contatto per testare il reset dei campi
 		getMainWindow().getTextBox("inNome").setText(contatto[0]);
@@ -222,6 +230,201 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		
 		// vado via
 		getMainWindow().getButton("Indietro").click();
+	}
+	
+	/**
+	 * Testing if user insert a void Rub name in Visualizza contatti
+	 */
+	public void testVoidNameVisualizzaContatti() {
+		// parto da index
+		pannelloIndexVisible(true);
+		
+		// vado in visualizza contatti
+		getMainWindow().getButton("Visualizza contatti").click();
+		
+		// setto un campo nullo a inNameRub
+		getMainWindow().getTextBox("inNameRub").setText("");
+		getMainWindow().getButton("Invio ").click();
+		
+		// non mi sono mosso da creazione rubrica
+		pannelloRubStpVisible(true);
+		pannelloOutputVisible(false);
+		
+		// controllo che l'errore venga stampato
+		assertEquals("Nome File non corretto.Riprova!                       ", getMainWindow().getTextBox("testoIns").getText());
+		
+		// vado via
+		getMainWindow().getButton("Indietro").click();
+	
+	}
+	
+	/**
+	 * Testing if user insert an invalid Rub name in Visualizza contatti
+	 */
+	public void testInvalidNameVisualizzaContatti() {
+		// parto da index
+		pannelloIndexVisible(true);
+		
+		// vado in visualizza contatti
+		getMainWindow().getButton("Visualizza contatti").click();
+		
+		// setto un campo nullo a inNameRub
+		getMainWindow().getTextBox("inNameRub").setText("INVALID_INVALID_INVALID");
+		getMainWindow().getButton("Invio ").click();
+		
+		// non mi sono mosso da creazione rubrica
+		pannelloRubStpVisible(true);
+		pannelloOutputVisible(false);
+		
+		// controllo che l'errore venga stampato
+		assertEquals("File non esistente. Riprova!                        ", getMainWindow().getTextBox("testoIns").getText());
+		
+		// vado via
+		getMainWindow().getButton("Indietro").click();
+	
+	}
+	
+	/**
+	 * Testing if the user lists the contacts
+	 */
+	public void testListContacts() {
+		// parto da index
+		pannelloIndexVisible(true);
+		
+		// vado in visualizza contatti
+		getMainWindow().getButton("Visualizza contatti").click();
+		
+		// setto un campo nullo a inNameRub
+		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getButton("Invio ").click();
+		
+		// vado in output
+		pannelloRubStpVisible(false);
+		pannelloOutputVisible(true);
+		
+		// mi faccio un giretto tra i contatti :)
+		assertFalse(getMainWindow().getButton("<<").isEnabled());
+		assertTrue(getMainWindow().getButton(">>").isEnabled());
+		
+		getMainWindow().getButton(">>").click();
+		
+		assertTrue(getMainWindow().getButton("<<").isEnabled());
+		assertFalse(getMainWindow().getButton(">>").isEnabled());
+		
+		getMainWindow().getButton("<<").click();
+		
+		assertFalse(getMainWindow().getButton("<<").isEnabled());
+		assertTrue(getMainWindow().getButton(">>").isEnabled());
+		
+		// vado via
+		getMainWindow().getButton("Indietro").click();
+	
+	}
+	
+	/**
+	 * Testing if user insert a void Rub Name into Cerca contatti
+	 */
+	public void testVoidNameCerca() {
+		// parto da index
+		pannelloIndexVisible(true);
+		
+		// vado in cerca contatti
+		getMainWindow().getButton("Cerca Contatti").click();
+		
+		// setto un campo nullo a inNameRub
+		getMainWindow().getTextBox("inNameRub").setText("");
+		getMainWindow().getButton("Cerca").click();
+		
+		// non mi sono mosso da cerca contatti
+		pannelloCercaVisible(true);
+		pannelloRisultatiVisible(false);
+		
+		// controllo che l'errore venga stampato
+		assertEquals("Nome File non corretto.Riprova!                       ", getMainWindow().getTextBox("testoStp").getText());
+		
+		// vado via
+		getMainWindow().getButton("Indietro").click();
+		
+	}
+	
+	/**
+	 * Testing if user insert an invalid Rub Name into Cerca contatti
+	 */
+	public void testInvalidNameCerca() {
+		// parto da index
+		pannelloIndexVisible(true);
+		
+		// vado in cerca contatti
+		getMainWindow().getButton("Cerca Contatti").click();
+		
+		// setto un campo invalido a inNameRub
+		getMainWindow().getTextBox("inNameRub").setText("INVALID_INVALID_INVALID");
+		getMainWindow().getButton("Cerca").click();
+		
+		// non mi sono mosso da cerca contatti
+		pannelloCercaVisible(true);
+		pannelloRisultatiVisible(false);
+		
+		// controllo che l'errore venga stampato
+		assertEquals("File non esistente. Riprova!                        ", getMainWindow().getTextBox("testoStp").getText());
+		
+		// vado via
+		getMainWindow().getButton("Indietro").click();
+		
+	}
+	
+	/**
+	 * Testing if user insert an invalid contact name into Cerca contatti
+	 */
+	public void testInvalidContactNameCerca() {
+		// parto da index
+		pannelloIndexVisible(true);
+		
+		// vado in cerca contatti
+		getMainWindow().getButton("Cerca Contatti").click();
+		
+		// setto un campo invalido a inNameRub
+		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getTextBox("inCerca").setText("INVALID_INVALID_INVALID");
+		getMainWindow().getButton("Cerca").click();
+		
+		// vado in risultati
+		pannelloCercaVisible(false);
+		pannelloRisultatiVisible(true);
+		
+		// controllo che l'errore venga stampato
+		assertEquals("Nessun contatto trovato!!", getMainWindow().getTextBox("risultati").getText());
+		
+		// vado via
+		getMainWindow().getButton("Indietro").click();
+		
+	}
+	
+	/**
+	 * Testing if user insert an valid contact name into Cerca contatti
+	 */
+	public void testValidContactNameCerca() {
+		// parto da index
+		pannelloIndexVisible(true);
+		
+		// vado in cerca contatti
+		getMainWindow().getButton("Cerca Contatti").click();
+		
+		// setto un campo invalido a inNameRub
+		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getTextBox("inCerca").setText("nome");
+		getMainWindow().getButton("Cerca").click();
+		
+		// vado in risultati
+		pannelloCercaVisible(false);
+		pannelloRisultatiVisible(true);
+		
+		// controllo che l'errore non venga stampato
+		assertFalse(getMainWindow().getTextBox("risultati").getText().equals("Nessun contatto trovato!!"));
+		
+		// vado via
+		getMainWindow().getButton("Indietro").click();
+		
 	}
 	
 	/**
