@@ -1,3 +1,4 @@
+package is2.rubrica;
 /**
  * Autore :Alenadri Enrico
  * Classe : III G

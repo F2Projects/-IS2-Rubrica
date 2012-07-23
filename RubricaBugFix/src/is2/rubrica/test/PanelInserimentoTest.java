@@ -13,7 +13,7 @@ import org.uispec4j.interception.MainClassAdapter;
 
 public class PanelInserimentoTest extends UISpecTestCase {
 	
-	private String thisTestRubName = "GuiTest-" + new Random().nextInt();
+	private final static String thisTestRubName = "GuiTest-" + new Random().nextInt();
 	
 	protected void setUp() {
 		this.setAdapter(new MainClassAdapter(Rubrica.class, new String[0]));
@@ -128,11 +128,11 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		getMainWindow().getButton("Crea rubrica").click();
 		
 		// setto inNameRub
-		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName + "_no_items");
+		getMainWindow().getTextBox("inNameRub").setText(PanelInserimentoTest.thisTestRubName + "_no_items");
 		getMainWindow().getButton("Invio").click();
 		
 		// controllo che abbia creato il file
-		assertTrue(new File(this.thisTestRubName + "_no_items").exists());
+		assertTrue(new File(PanelInserimentoTest.thisTestRubName + "_no_items").exists());
 		
 		// vado in aggiungi contatto
 		pannelloRubInsVisible(false);
@@ -159,7 +159,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		getMainWindow().getButton("Crea rubrica").click();
 		
 		// setto inNameRub
-		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getTextBox("inNameRub").setText(PanelInserimentoTest.thisTestRubName);
 		getMainWindow().getButton("Invio").click();
 		
 		String[] contatto = new String[] {"nome", "cognome", "numero", "indirizzo"};
@@ -180,7 +180,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		getMainWindow().getButton("Add").click();
 		
 		// controllo che siano stati inseriti i contatti correttamente
-		BufferedReader fileReader = new BufferedReader(new FileReader(new File(this.thisTestRubName)));
+		BufferedReader fileReader = new BufferedReader(new FileReader(new File(PanelInserimentoTest.thisTestRubName)));
 		String linea;
 		int index=0;
 		while((linea = fileReader.readLine()) != null) 
@@ -215,10 +215,10 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		getMainWindow().getButton("Crea rubrica").click();
 		
 		// controllo che gia` esista il file
-		assertTrue(new File(this.thisTestRubName).exists());
+		assertTrue(new File(PanelInserimentoTest.thisTestRubName).exists());
 		
 		// setto un campo nullo a inNameRub
-		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getTextBox("inNameRub").setText(PanelInserimentoTest.thisTestRubName);
 		getMainWindow().getButton("Invio").click();
 		
 		// non mi sono mosso da creazione rubrica
@@ -226,7 +226,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		pannelloInputVisible(false);
 		
 		// controllo che l'errore venga stampato
-		assertEquals("File già esistente. Riprova                         ", getMainWindow().getTextBox("testoIns").getText());
+		assertEquals("File giˆ esistente. Riprova                         ", getMainWindow().getTextBox("testoIns").getText());
 		
 		// vado via
 		getMainWindow().getButton("Indietro").click();
@@ -295,7 +295,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		getMainWindow().getButton("Visualizza contatti").click();
 		
 		// setto un campo nullo a inNameRub
-		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getTextBox("inNameRub").setText(PanelInserimentoTest.thisTestRubName);
 		getMainWindow().getButton("Invio ").click();
 		
 		// vado in output
@@ -384,7 +384,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		getMainWindow().getButton("Cerca Contatti").click();
 		
 		// setto un campo invalido a inNameRub
-		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getTextBox("inNameRub").setText(PanelInserimentoTest.thisTestRubName);
 		getMainWindow().getTextBox("inCerca").setText("INVALID_INVALID_INVALID");
 		getMainWindow().getButton("Cerca").click();
 		
@@ -411,7 +411,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		getMainWindow().getButton("Cerca Contatti").click();
 		
 		// setto un campo invalido a inNameRub
-		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getTextBox("inNameRub").setText(PanelInserimentoTest.thisTestRubName);
 		getMainWindow().getTextBox("inCerca").setText("nome");
 		getMainWindow().getButton("Cerca").click();
 		
@@ -425,6 +425,14 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		// vado via
 		getMainWindow().getButton("Indietro").click();
 		
+	}
+	
+	/**
+	 * Testing exit button
+	 */
+	public void testExit() {
+		getMainWindow().getButton("esci").click();
+		assertEquals(null, getMainWindow());
 	}
 	
 	/**
@@ -515,7 +523,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		assertEquals(att, window.getTextBox("Indirizzo:").isVisible());
 
 		assertEquals(att, window.getButton(">>").isVisible());
-		assertEquals(att, window.getButton("Indietro").isVisible());
+		//assertEquals(att, window.getButton("Indietro").isVisible());
 		assertEquals(att, window.getButton("<<").isVisible());
 		
 	}
@@ -528,7 +536,7 @@ public class PanelInserimentoTest extends UISpecTestCase {
 	private void pannelloRubInsVisible(boolean att) {
 		Window window = getMainWindow();
 		
-		assertEquals(att, window.getTextBox("testoStp").isVisible());
+		assertFalse(window.getTextBox("testoStp").isVisible());
 		assertEquals(att, window.getTextBox("testoIns").isVisible());
 		assertEquals(att, window.getTextBox("inNameRub").isVisible());
 

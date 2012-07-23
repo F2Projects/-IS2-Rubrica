@@ -12,14 +12,17 @@
  * 1. indentation
  * 2. added some inline documentation
  * 3. added the serialVersionUID (not necessary)
- * 4. converted TextField objects in JTextField (frow AWT to Swing)
+ * 4. converted TextField objects in JTextField and TextArea to JTextArea (frow AWT to Swing)
+ * 5. resolved change panel if submit void rub name (thx to testVoidNameCreazioneRubrica())
+ * 6. typing error changing "Indirizzo" to "Indirizzo:" (thx to pannelloOutputVisible())
+ * 7. added back button for pannelloRubIns (thx to test*CreazioneRubrica())
+ * 8. resolved exit issue (thx to testExit())
  * 
  * NB: Some class or variables name are edited in order to respect the standard "camel notation"
  * to make this source code more readable. 
  */
 package is2.rubrica;
 
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -33,6 +36,7 @@ import java.io.PrintStream;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class PanelInserimento extends JPanel implements ActionListener{
@@ -77,7 +81,7 @@ public class PanelInserimento extends JPanel implements ActionListener{
 	private File exFile;
 	private PrintStream scrittura;
 	private BufferedReader lettura;
-	private TextArea risultati;
+	private JTextArea risultati;
 	private int[] cerca = new int[100];
 	
 	private JLabel testoIns,
@@ -155,7 +159,7 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
 		this.inCerca.setName("inCerca");
 		// ----------------------------------
-		this.risultati = new TextArea(10,35);
+		this.risultati = new JTextArea(10,35);
 		// ----------------------------------
 		// Per poter fare testing, sono stati aggiunti i nomi ai textfield
 		this.risultati.setName("risultati");
@@ -186,7 +190,14 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		this.stmNome = new JLabel("Nome:");
 		this.stmCognome = new JLabel("Cognome:");
 		this.stmNumero = new JLabel("Numero:");
-		this.stmIndirizzo = new JLabel("Indirizzo");
+		/* -------------------------------------------------
+		 * FIX-6
+		 * Errore di battitura
+		 * -------------------------------------------------
+		 */
+		//this.stmIndirizzo = new JLabel("Indirizzo");
+		this.stmIndirizzo = new JLabel("Indirizzo:");
+		// -------------------------------------------------
 		this.avanti = new JButton(">>");
 		this.back = new JButton("Indietro");
 		this.indietro = new JButton("<<");
@@ -331,8 +342,18 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		if(command.equals("invio")){
 			test=true;
 			
+			/*-------------------------------------------------
+			 * FIX-5
+			 * ------------------------------------------------ 
+			 * Erroneamente la variabile test veniva settata a true
+			 * anche se veniva sottomesso un campo vuoto come nome della rubrica.
+			 * In questo modo si permetteva di cambiare pannello 
+			 * e di non salvare i contatti successivamente inseriti
+			 */
 			if(nameRub.equals(""))
-				test=true;
+				//test=true;
+				test = false;
+			// ------------------------------------------------
 			
 			this.exFile = new File(nameRub);
 			if( ((this.exFile).exists()) || (test==false)){
@@ -426,9 +447,18 @@ public class PanelInserimento extends JPanel implements ActionListener{
 					this.testoStp.setText("File non esistente. Riprova!                        ");
 			}
 		}
-		if(command.equals("Esci")){
+		/* ---------------------------------
+		 * FIX-8
+		 * ---------------------------------
+		 * Poiche` ogni comando veniva convertito in minuscolo
+		 * l'exit non veniva mai invocato poiche` scritto erroneamente
+		 * con la maiuscola
+		 */
+		//if(command.equals("Esci")){
+		if(command.equals("esci")){
 			System.exit(0);
 		}
+		// ---------------------------------
 		if(command.equals("crea rubrica")){
 			this.pannelloRubIns(true);
 			this.pannelloIndex(false);
@@ -622,6 +652,15 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		this.inNameRub.setVisible(att);
 		this.invio.setVisible(att);
 		this.invio_.setVisible(false);
+		/* ----------------------------------------
+		 * FIX-7
+		 * ----------------------------------------
+		 * Attivato il tasto back per il pannello inserisci rubrica
+		 * 
+		 */
+		this.back.setVisible(att);
+		// ----------------------------------------
+
 	}
 	
 	void pannelloRubStp(boolean att) {

@@ -5,5 +5,8 @@
 *.war
 *.ear
 
+# Testing files "
+GuiTest*
+
 # Add libs #
 !RubricaTestSuite/lib/*

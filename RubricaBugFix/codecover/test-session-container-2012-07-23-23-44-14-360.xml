@@ -1,0 +1,3391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestSessionContainer xmlns="http://www.codecover.org/xml/testsession-container" Date="1343079854345" TestSessionContainerId="faa00df2-3824-4bbc-9117-e852d3a78a94" version="1.0">
+<SrcFileList>
+<SrcFile Content="/**&#10; * Rubrica.java&#10; * &#10; * @author Alenadri Enrico - III G&#10; * @date 6/02/2009&#10; * Fixed by:&#10; * &quot;helloIAmPau - Pasquale Boemio &lt;pa.boemio[at]studenti.unina.it&gt;&quot;&#10; * &quot;b3by&quot; - Antonio Bevilacqua &lt;anto.bevilacqua[at]studenti.unina.it&gt;&quot;&#10; * ----------&#10; * This is the first called class. It simply shows the jpanel &quot;FramePri&quot;.&#10; * &#10; * We have fixed:&#10; * 1. indentation&#10; * 2. added some inline documentation&#10; * 3. replaced show() method with setVisible() method of frame object. show() seems to be deprecated&#10; * &#10; * NB: Some class or variables name are edited in order to respect the standard &quot;camel notation&quot;&#10; * to make this source code more readable. &#10; */&#10;package is2.rubrica;&#10;import javax.swing.JFrame;&#10;&#10;&#10;public class Rubrica{&#10;&#9;/**&#10;&#9; * The main method. I don't have to add something else. &#10;&#9; * &#10;&#9; * @param args : This is some command line arguments. Be careful, Rubrica.java doesn't use it!&#10;&#9; */&#10;&#9;public static void main(String[] args){&#10;&#9;&#9;&#10;&#9;&#9;int xLoc=400,   // posizione x dei frame nello schermo&#10;&#9;&#9;&#9;yLoc=400;   // posizione y dei frame nello schermo&#10;&#9;&#9;&#10;&#9;&#9;FramePri frame = new FramePri(xLoc,yLoc); // creo il pannello che verra` mostrato&#10;&#9;&#9;frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // operazione da eseguire alla sua chiusura&#10;&#9;&#9;&#10;&#9;&#9;/*-------------------------------------------------&#10;&#9;&#9; * FIX-3&#10;&#9;&#9; * ------------------------------------------------ &#10;&#9;&#9; * Il metodo show() risulta essere deprecato; per evitare problemi futuri&#10;&#9;&#9; * utilizziamo il metodo setVisible()&#10;&#9;&#9; */&#10;&#9;&#9;//frame.show(); &#10;&#9;&#9;frame.setVisible(true); // mostrami il pannello :)&#10;&#9;&#9;//-------------------------------------------------&#10;     &#10;&#9;}&#10; }&#10;" Filename="Rubrica.java" Intrnl_Id="1"/>
+<SrcFile Content="/**&#10; * PanelInserimento.java&#10; * &#10; * @author Alenadri Enrico - III G&#10; * @date 6/02/2009&#10; * Fixed by:&#10; * &quot;helloIAmPau - Pasquale Boemio &lt;pa.boemio[at]studenti.unina.it&gt;&quot;&#10; * &quot;b3by&quot; - Antonio Bevilacqua &lt;anto.bevilacqua[at]studenti.unina.it&gt;&quot;&#10; * ----------&#10; * &#10; * We have fixed:&#10; * 1. indentation&#10; * 2. added some inline documentation&#10; * 3. added the serialVersionUID (not necessary)&#10; * 4. converted TextField objects in JTextField (frow AWT to Swing)&#10; * 5. resolved change panel if submit void rub name (thx to testVoidNameCreazioneRubrica())&#10; * 6. typing error changing &quot;Indirizzo&quot; to &quot;Indirizzo:&quot; (thx to pannelloOutputVisible())&#10; * &#10; * NB: Some class or variables name are edited in order to respect the standard &quot;camel notation&quot;&#10; * to make this source code more readable. &#10; */&#10;package is2.rubrica;&#10;&#10;import java.awt.TextArea;&#10;import java.awt.event.ActionEvent;&#10;import java.awt.event.ActionListener;&#10;import java.io.BufferedReader;&#10;import java.io.File;&#10;import java.io.FileNotFoundException;&#10;import java.io.FileOutputStream;&#10;import java.io.FileReader;&#10;import java.io.IOException;&#10;import java.io.PrintStream;&#10;&#10;import javax.swing.JButton;&#10;import javax.swing.JLabel;&#10;import javax.swing.JPanel;&#10;import javax.swing.JTextField;&#10;&#10;public class PanelInserimento extends JPanel implements ActionListener{&#10;&#10;    // L'oggetto JFrame e` un oggetto &quot;Serializable&quot;. Poiche` abbiamo seri problemi,&#10;&#9;// preferiamo eliminare anche tutti i &quot;warning&quot; presenti nel codice, e quindi &#10;&#9;// assegnamo a questo un id autogenerato!&#10;&#9;private static final long serialVersionUID = 685601408825075349L;&#10;&#9;&#10;&#9;// ----------------------------------&#10;&#9;// Variabile non usata&#10;&#9;// private boolean exist=true;&#10;&#9;// ----------------------------------&#10;&#9;private int num=0,&#10;&#9;&#9;&#9;linee=0,&#10;&#9;&#9;&#9;lineeStm=0,&#10;&#9;&#9;&#9;i,&#10;&#9;&#9;&#9;cont;&#10;&#9;// ----------------------------------&#10;&#9;// Variabili non usate&#10;&#9;// &#9;&#9;con,&#10;&#9;//      x=0;&#10;&#9;// ----------------------------------&#10;&#9;&#10;&#9;private String linea,&#10;&#9;&#9;&#9;stringa,&#10;&#9;&#9;&#9;risCerca=&quot;&quot;;&#10;&#9;// ----------------------------------&#10;&#9;// Variabile non usata&#10;&#9;// &#9;nameRub;&#10;&#9;// ----------------------------------&#10;&#9;&#10;&#9;private JTextField inNome,&#10;&#9;&#9;&#9;inCognome,&#10;&#9;&#9;&#9;inNumero,&#10;&#9;&#9;&#9;inIndirizzo,&#10;&#9;&#9;&#9;inNameRub,&#10;&#9;&#9;&#9;inCerca;&#10;&#9;&#10;&#9;private FileOutputStream fileS;&#10;&#9;private FileReader fileL;&#10;&#9;private File exFile;&#10;&#9;private PrintStream scrittura;&#10;&#9;private BufferedReader lettura;&#10;&#9;private TextArea risultati;&#10;&#9;private int[] cerca = new int[100];&#10;&#9;&#10;&#9;private JLabel testoIns,&#10;&#9;&#9;&#9;testoStp,&#10;&#9;&#9;&#9;nome,&#10;&#9;&#9;&#9;// ----------------------------------&#10;&#9;&#9;&#9;// Addirittura errori di battitura...&#10;&#9;&#9;&#9;// Congome,&#10;&#9;&#9;&#9;Cognome,&#10;&#9;&#9;&#9;// ----------------------------------&#10;&#9;&#9;&#9;Numero,&#10;&#9;&#9;&#9;Indirizzo,&#10;&#9;&#9;&#9;index,&#10;&#9;&#9;&#9;spazio,&#10;&#9;&#9;&#9;stmNome,&#10;&#9;&#9;&#9;stmCognome,&#10;&#9;&#9;&#9;stmNumero,&#10;&#9;&#9;&#9;stmIndirizzo,&#10;&#9;&#9;&#9;infoCerca;&#10;&#9;&#10;&#9;private JButton ok,&#10;&#9;&#9;&#9;reset,&#10;&#9;&#9;&#9;savExit,&#10;&#9;&#9;&#9;invio,&#10;&#9;&#9;&#9;invio_,&#10;&#9;&#9;&#9;indIns,&#10;&#9;&#9;&#9;indStp,&#10;&#9;&#9;&#9;indCer,&#10;&#9;&#9;&#9;avanti,&#10;&#9;&#9;&#9;back,&#10;&#9;&#9;&#9;indietro,&#10;&#9;&#9;&#9;exit,&#10;&#9;&#9;&#9;Cerca;&#10;&#9;&#10;&#9;public PanelInserimento(){&#10;&#9;&#9;&#10;&#9;&#9;this.exit = new JButton(&quot;esci&quot;);&#10;&#9;&#9;this.spazio= new JLabel(&quot;                              &quot;);&#10;&#9;&#9;&#10;&#9;&#9;// Componenti Index&#10;&#9;&#9;this.index = new JLabel(&quot;       Cosa vuoi fare?                                    &quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;// Per poter fare testing, sono stati aggiunti i nomi ad alcune JLabel&#10;&#9;&#9;this.index.setName(&quot;index&quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;this.indIns = new JButton(&quot;Crea rubrica&quot;);&#10;&#9;&#9;this.indStp = new JButton(&quot;Visualizza contatti&quot;);&#10;&#9;&#9;this.indCer = new JButton(&quot;Cerca Contatti&quot;);&#10;&#9;&#9;&#10;&#9;&#9;// Componenti inserimento nome Rubrica-inserimento scherda/stampa scheda&#10;&#9;&#9;this.testoIns = new JLabel(&quot;Inserisci il nome con cui salvare la rubrica        &quot;);&#10;&#9;&#9;this.testoStp = new JLabel(&quot;Inserisci il nome della rubrica        &quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;// Per poter fare testing, sono stati aggiunti i nomi ad alcune JLabel&#10;&#9;&#9;this.testoStp.setName(&quot;testoStp&quot;);&#10;&#9;&#9;this.testoIns.setName(&quot;testoIns&quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;this.inNameRub = new JTextField(10);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;// Per poter fare testing, sono stati aggiunti i nomi ai textfield&#10;&#9;&#9;this.inNameRub.setName(&quot;inNameRub&quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;this.invio = new JButton(&quot;Invio&quot;);&#10;&#9;&#9;this.invio_ = new JButton(&quot;Invio &quot;);&#10;&#9;&#9;&#10;&#9;&#9;// Componenti Cerca&#10;&#9;&#9;this.Cerca = new JButton(&quot;Cerca&quot;);&#10;&#9;&#9;this.infoCerca = new JLabel(&quot;Puoi cercare per Nome-Cognome-Numero-indirizzo&quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;// Per poter fare testing, sono stati aggiunti i nomi ai textfield&#10;&#9;&#9;this.infoCerca.setName(&quot;infoCerca&quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;this.inCerca = new JTextField(10);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;// Per poter fare testing, sono stati aggiunti i nomi ai textfield&#10;&#9;&#9;this.inCerca.setName(&quot;inCerca&quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;this.risultati = new TextArea(10,35);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;// Per poter fare testing, sono stati aggiunti i nomi ai textfield&#10;&#9;&#9;this.risultati.setName(&quot;risultati&quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;this.risultati.setEditable(false);&#10;&#9;&#9;this.risultati.setCaretPosition(0);&#10;&#9;&#9;&#10;&#9;&#9;// Componenti inserimento scheda&#10;&#9;&#9;this.nome = new JLabel(&quot;                Nome&quot;);&#10;&#9;&#9;this.Cognome = new JLabel(&quot;                Cognome&quot;);&#10;&#9;&#9;this.Numero = new JLabel(&quot;                Numero Casa&quot;);&#10;&#9;&#9;this.Indirizzo = new JLabel(&quot;                Indirizzo&quot;);&#10;&#9;&#9;this.ok = new JButton(&quot;Add&quot;);&#10;&#9;&#9;this.reset = new JButton(&quot;Reset&quot;);&#10;&#9;&#9;this.savExit = new JButton(&quot;Save &amp; Back&quot;);&#10;&#9;&#9;this.inNome = new JTextField(17);&#10;&#9;&#9;this.inCognome = new JTextField(17);&#10;&#9;&#9;this.inNumero = new JTextField(17);&#10;&#9;&#9;this.inIndirizzo = new JTextField(17);&#10;&#9;&#9;// Per poter fare testing, sono stati aggiunti i nomi ai textfield&#10;&#9;&#9;this.inNome.setName(&quot;inNome&quot;);&#10;&#9;&#9;this.inCognome.setName(&quot;inCognome&quot;);&#10;&#9;&#9;this.inNumero.setName(&quot;inNumero&quot;);&#10;&#9;&#9;this.inIndirizzo.setName(&quot;inIndirizzo&quot;);&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;&#10;&#9;&#9;// Componenti stampa Scheda&#10;&#9;&#9;this.stmNome = new JLabel(&quot;Nome:&quot;);&#10;&#9;&#9;this.stmCognome = new JLabel(&quot;Cognome:&quot;);&#10;&#9;&#9;this.stmNumero = new JLabel(&quot;Numero:&quot;);&#10;&#9;&#9;this.stmIndirizzo = new JLabel(&quot;Indirizzo&quot;);&#10;&#9;&#9;this.avanti = new JButton(&quot;&gt;&gt;&quot;);&#10;&#9;&#9;this.back = new JButton(&quot;Indietro&quot;);&#10;&#9;&#9;this.indietro = new JButton(&quot;&lt;&lt;&quot;);&#10;&#9;&#9;&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;// Variabile non usata&#10;&#9;&#9;// &#9;this.nameRub = inNameRub.getText();&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;&#10;&#9;&#9;// Aggiungo componenti index&#10;&#9;&#9;this.add(this.index);&#10;&#9;&#9;this.add(this.indIns);&#10;&#9;&#9;this.add(this.indStp);&#10;&#9;&#9;this.add(this.indCer);&#10;&#9;&#9;this.add(this.exit);&#10;&#9;&#9;&#10;&#9;&#9;this.indIns.addActionListener(this);&#10;&#9;&#9;this.indStp.addActionListener(this);&#10;&#9;&#9;this.indCer.addActionListener(this);&#10;&#9;&#9;this.exit.addActionListener(this);&#10;&#9;&#9;&#10;&#9;&#9;// Aggiungo componenti Inserimento rubrica&#10;&#9;&#9;this.add(this.testoStp);&#10;&#9;&#9;this.add(this.testoIns);&#10;&#9;&#9;this.add(this.inNameRub);&#10;&#9;&#9;this.add(this.invio);&#10;&#9;&#9;this.add(this.invio_);&#10;&#9;&#9;&#10;&#9;&#9;this.invio.addActionListener(this);&#10;&#9;&#9;this.invio_.addActionListener(this);&#10;&#9;&#9;&#10;&#9;&#9;// Aggiungo componenti Cerca&#10;&#9;&#9;this.add(this.risultati);&#10;&#9;&#9;this.add(this.infoCerca);&#10;&#9;&#9;this.add(this.inCerca);&#10;&#9;&#9;this.add(this.Cerca);&#10;&#9;&#9;&#10;&#9;&#9;this.Cerca.addActionListener(this);&#10;&#9;&#9;&#10;&#9;&#9;// Aggiungo componenti Input contatti&#10;&#9;&#9;this.add(this.nome);&#10;&#9;&#9;this.add(this.inNome);&#10;&#9;&#9;this.add(this.Cognome);&#10;&#9;&#9;this.add(this.inCognome);&#10;&#9;&#9;this.add(this.Numero);&#10;&#9;&#9;this.add(this.inNumero);&#10;&#9;&#9;this.add(this.Indirizzo);&#10;&#9;&#9;this.add(this.inIndirizzo);&#10;&#9;&#9;this.add(this.ok);&#10;&#9;&#9;this.add(this.reset);&#10;&#9;&#9;this.add(this.savExit);&#10;&#9;&#9;&#10;&#9;&#9;this.ok.addActionListener(this);&#10;&#9;&#9;this.reset.addActionListener(this);&#10;&#9;&#9;this.savExit.addActionListener(this);&#10;&#9;&#9;&#10;&#9;&#9;// Aggiungo componenti Visualizzazione contatti&#10;&#9;&#9;this.add(this.stmNome);&#10;&#9;&#9;this.add(this.stmCognome);&#10;&#9;&#9;this.add(this.stmNumero);&#10;&#9;&#9;this.add(this.stmIndirizzo);&#10;&#9;&#9;this.add(this.indietro);&#10;&#9;&#9;this.add(this.back);&#10;&#9;&#9;this.add(this.avanti);&#10;&#9;&#9;this.indietro.setEnabled(false);&#10;&#9;&#9;&#10;&#9;&#9;this.avanti.addActionListener(this);&#10;&#9;&#9;this.back.addActionListener(this);&#10;&#9;&#9;this.indietro.addActionListener(this);&#10;&#9;&#9;&#10;&#9;&#9;// Setto i componenti per visualizzare la scherata di index&#10;&#9;&#9;this.pannelloInput(false);&#10;&#9;&#9;this.pannelloOutput(false);&#10;&#9;&#9;this.pannelloRubIns(false);&#10;&#9;&#9;this.pannelloCerca(false);&#10;&#9;&#9;this.pannelloRisultati(false);&#10;&#9;&#9;&#10;&#9;}&#10;&#9;&#10;&#9;public void actionPerformed(ActionEvent evt){&#10;&#9;&#9;&#10;&#9;&#9;String nome = inNome.getText();&#10;&#9;&#9;String cognome = inCognome.getText();&#10;&#9;&#9;String numero = inNumero.getText();&#10;&#9;&#9;String indirizzo = inIndirizzo.getText();&#10;&#9;&#9;String nameRub = inNameRub.getText();&#10;&#9;&#9;boolean test;&#10;&#9;&#9;&#10;&#9;&#9;String command = evt.getActionCommand();&#10;&#9;&#9;command = command.toLowerCase();&#10;&#9;&#9;&#10;&#9;&#9;if(command.equals(&quot;&lt;&lt;&quot;)){&#10;&#9;&#9;&#9;if(this.num&gt;0){&#10;&#9;&#9;&#9;&#9;this.num--;&#10;&#9;&#9;&#9;&#9;this.avanti.setEnabled(true);&#10;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;if(this.num&lt;0)&#10;&#9;&#9;&#9;&#9;this.indietro.setEnabled(false);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.letturaFile(nameRub);&#10;&#9;&#9;&#9;this.stampa();&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;&gt;&gt;&quot;)){&#10;&#9;&#9;&#9;if((this.num+1)*4&lt;this.lineeStm){&#10;&#9;&#9;&#9;&#9;this.num++;&#10;&#9;&#9;&#9;&#9;this.indietro.setEnabled(true);&#10;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;if((this.num+1)*4==this.lineeStm)&#10;&#9;&#9;&#9;&#9;this.avanti.setEnabled(false);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.letturaFile(nameRub);&#10;&#9;&#9;&#9;this.stampa();&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;indietro&quot;)){&#10;&#9;&#9;&#9;this.num=0;&#10;&#9;&#9;&#9;this.risCerca=&quot;&quot;;&#10;&#9;&#9;&#9;this.testoStp.setText(&quot;Inserisci il nome della rubrica        &quot;);&#10;&#9;&#9;&#9;this.testoIns.setText(&quot;Inserisci il nome con cui salvare la rubrica        &quot;);&#10;&#9;&#9;&#9;this.avanti.setEnabled(true);&#10;&#9;&#9;&#9;this.indietro.setEnabled(false);&#10;&#9;&#9;&#9;this.pannelloIndex(true);&#10;&#9;&#9;&#9;this.pannelloInput(false);&#10;&#9;&#9;&#9;this.pannelloOutput(false);&#10;&#9;&#9;&#9;this.pannelloRubIns(false);&#10;&#9;&#9;&#9;this.pannelloRubStp(false);&#10;&#9;&#9;&#9;this.pannelloCerca(false);&#10;&#9;&#9;&#9;this.pannelloRisultati(false);&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;add&quot;)){&#10;&#9;&#9;&#9;try{&#10;&#9;&#9;&#9;&#9;this.scrittura.println(nome);&#10;&#9;&#9;&#9;&#9;this.scrittura.println(cognome);&#10;&#9;&#9;&#9;&#9;this.scrittura.println(numero);&#10;&#9;&#9;&#9;&#9;this.scrittura.println(indirizzo);&#10;&#9;&#9;&#9;} &#10;&#9;&#9;&#9;catch(NullPointerException ex){&#10;&#9;&#9;&#9;&#9;System.out.println(&quot;File insesistente...                        &quot;);&#10;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.reset();&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;invio&quot;)){&#10;&#9;&#9;&#9;test=true;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;/*-------------------------------------------------&#10;&#9;&#9;&#9; * FIX-5&#10;&#9;&#9;&#9; * ------------------------------------------------ &#10;&#9;&#9;&#9; * Erroneamente la variabile test veniva settata a true&#10;&#9;&#9;&#9; * anche se veniva sottomesso un campo vuoto come nome della rubrica.&#10;&#9;&#9;&#9; * In questo modo si permetteva di cambiare pannello &#10;&#9;&#9;&#9; * e di non salvare i contatti successivamente inseriti&#10;&#9;&#9;&#9; */&#10;&#9;&#9;&#9;if(nameRub.equals(&quot;&quot;))&#10;&#9;&#9;&#9;&#9;//test=true;&#10;&#9;&#9;&#9;&#9;test = false;&#10;&#9;&#9;&#9;// ------------------------------------------------&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.exFile = new File(nameRub);&#10;&#9;&#9;&#9;if( ((this.exFile).exists()) || (test==false)){&#10;&#9;&#9;&#9;&#9;this.inNameRub.setText(&quot;&quot;);&#10;&#9;&#9;&#9;&#9;if(test==false)&#10;&#9;&#9;&#9;&#9;&#9;this.testoIns.setText(&quot;Nome File non corretto.Riprova                        &quot;);&#10;&#9;&#9;&#9;&#9;else&#10;&#9;&#9;&#9;&#9;&#9;// ----------------------------------&#10;&#9;&#9;&#9;&#9;&#9;// Carattere UTF8 non codificato &#10;&#9;&#9;&#9;&#9;&#9;//this.testoIns.setText(&quot;File gi‡ esistente. Riprova                         &quot;);&#10;&#9;&#9;&#9;&#9;&#9;this.testoIns.setText(&quot;File già esistente. Riprova                         &quot;);&#10;&#9;&#9;&#9;&#9;&#9;// ----------------------------------&#10;&#9;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;else{&#10;&#9;&#9;&#9;&#9;pannelloRubIns(false);&#10;&#9;&#9;&#9;&#9;pannelloInput(true);&#10;&#9;&#9;&#9;&#9;try{&#10;&#9;&#9;&#9;&#9;&#9;this.fileS = new FileOutputStream(nameRub);&#10;&#9;&#9;&#9;&#9;&#9;this.scrittura = new PrintStream(this.fileS);&#10;&#9;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#9;catch(FileNotFoundException ex){&#10;&#9;&#9;&#9;&#9;&#9;System.out.println(&quot;Errore in lettura File...&quot;);&#10;&#9;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;}&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;invio &quot;)){&#10;&#9;&#9;&#9;test=true;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;if(nameRub.equals(&quot;&quot;))&#10;&#9;&#9;&#9;&#9;test=false;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.exFile = new File(nameRub);&#10;&#9;&#9;&#9;if( ((this.exFile).exists()) &amp;&amp; (test==true)){&#10;&#9;&#9;&#9;&#9;this.letturaFile(nameRub);&#10;&#9;&#9;&#9;&#9;this.stampa();&#10;&#9;&#9;&#9;&#9;this.pannelloRubStp(false);&#10;&#9;&#9;&#9;&#9;this.pannelloOutput(true);&#10;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;else{&#10;&#9;&#9;&#9;&#9;this.inNameRub.setText(&quot;&quot;);&#10;&#9;&#9;&#9;&#9;if(test==false)&#10;&#9;&#9;&#9;&#9;&#9;this.testoStp.setText(&quot;Nome File non corretto.Riprova!                       &quot;);&#10;&#9;&#9;&#9;&#9;else&#10;&#9;&#9;&#9;&#9;&#9;testoStp.setText(&quot;File non esistente. Riprova!                        &quot;);&#10;&#9;&#9;&#9;}&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;reset&quot;)){&#10;&#9;&#9;&#9;this.reset();&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;save &amp; back&quot;)){&#10;&#9;&#9;&#9;this.pannelloInput(false);&#10;&#9;&#9;&#9;this.pannelloRubIns(false);&#10;&#9;&#9;&#9;this.pannelloRubStp(false);&#10;&#9;&#9;&#9;this.pannelloIndex(true);&#10;&#9;&#9;&#9;this.pannelloOutput(false);&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;cerca&quot;)){&#10;&#9;&#9;&#9;test=true;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;if(nameRub.equals(&quot;&quot;))&#10;&#9;&#9;&#9;&#9;test=false;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.exFile = new File(nameRub);&#10;&#9;&#9;&#9;if( ((this.exFile).exists()) &amp;&amp; (test==true)){&#10;&#9;&#9;&#9;&#9;this.stringa = this.inCerca.getText();&#10;&#9;&#9;&#9;&#9;this.cont=0;&#10;&#9;&#9;&#9;&#9;// ----------------------------------&#10;&#9;&#9;&#9;&#9;// Variabile non usata&#10;&#9;&#9;&#9;&#9;// con=0;&#10;&#9;&#9;&#9;&#9;// ----------------------------------&#10;&#9;&#9;&#9;&#9;this.linee=0;&#10;&#9;&#9;&#9;&#9;this.cerca = new int[100];&#10;&#9;&#9;&#9;&#9;this.cerca(this.stringa,nameRub);&#10;&#9;&#9;&#9;&#9;this.i=0;&#10;&#9;&#9;&#9;&#9;if(this.cerca[0]==0) {&#10;&#9;&#9;&#9;&#9;&#9;do {&#10;&#9;&#9;&#9;&#9;&#9;&#9;this.stampaRisultati(this.cerca[this.i]-1,nameRub);&#10;&#9;&#9;&#9;&#9;&#9;&#9;this.i++;&#10;&#9;&#9;&#9;&#9;&#9;} while(this.cerca[this.i]!=0);&#10;&#9;&#9;&#9;&#9;}else{&#10;&#9;&#9;&#9;&#9;&#9;this.risCerca=&quot;Nessun contatto trovato!!&quot;;&#10;&#9;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#9;this.risultati.setText(this.risCerca);&#10;&#9;&#9;&#9;&#9;this.pannelloCerca(false);&#10;&#9;&#9;&#9;&#9;this.pannelloRisultati(true);&#10;&#9;&#9;&#9;}else{&#10;&#9;&#9;&#9;&#9;this.inNameRub.setText(&quot;&quot;);&#10;&#9;&#9;&#9;&#9;if(test==false)&#10;&#9;&#9;&#9;&#9;&#9;this.testoStp.setText(&quot;Nome File non corretto.Riprova!                       &quot;);&#10;&#9;&#9;&#9;&#9;else&#10;&#9;&#9;&#9;&#9;&#9;this.testoStp.setText(&quot;File non esistente. Riprova!                        &quot;);&#10;&#9;&#9;&#9;}&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;Esci&quot;)){&#10;&#9;&#9;&#9;System.exit(0);&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;crea rubrica&quot;)){&#10;&#9;&#9;&#9;this.pannelloRubIns(true);&#10;&#9;&#9;&#9;this.pannelloIndex(false);&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;visualizza contatti&quot;)){&#10;&#9;&#9;&#9;this.pannelloRubStp(true);&#10;&#9;&#9;&#9;this.pannelloIndex(false);&#10;&#9;&#9;}&#10;&#9;&#9;if(command.equals(&quot;cerca contatti&quot;)) {&#10;&#9;&#9;&#9;this.pannelloIndex(false);&#10;&#9;&#9;&#9;this.pannelloCerca(true);&#10;&#9;&#9;}&#10;&#9;}&#10;   &#10;&#9;void letturaFile(String nomeFile) {&#10;&#9;&#9;  int cont=0;&#10;&#9;&#9;  this.lineeStm=0;&#10;&#9;&#9;  &#10;&#9;&#9;  try {&#10;&#9;&#9;&#9;  this.fileL = new FileReader(nomeFile);&#10;&#9;&#9;&#9;  this.lettura = new BufferedReader(this.fileL);&#10;&#9;&#9;&#9;  &#10;&#9;&#9;&#9;  while( (this.linea = this.lettura.readLine()) != null )&#10;&#9;&#9;&#9;&#9;  this.lineeStm++;&#10;&#9;&#9;&#9;  &#10;&#9;&#9;&#9;  this.fileL = new FileReader(nomeFile);&#10;&#9;&#9;&#9;  this.lettura = new BufferedReader(fileL);&#10;&#9;&#9;&#9;  &#10;&#9;&#9;&#9;  while( cont &lt; this.num*4 ) {&#10;&#9;&#9;&#9;&#9;  cont++;&#10;&#9;&#9;&#9;&#9;  this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;  }&#10;&#9;&#9;  }&#10;&#9;&#9;  catch(FileNotFoundException ex) {&#10;&#9;&#9;&#9;  System.out.println(&quot;Errore in lettura file, Nessun file trovato!&quot;);&#10;&#9;&#9;  }&#10;&#9;&#9;  catch(IOException ex) {&#10;&#9;&#9;&#9;  System.out.println(&quot;Errore in lettura file..&quot;);&#10;&#9;&#9;  }&#10;&#9;}&#10;&#9;&#10;&#9;void cerca(String stringRicerca,String nomeFile) {&#10;&#9;&#9;this.i=0;&#10;&#9;&#9;&#10;&#9;&#9;try{&#10;&#9;&#9;&#9;this.fileL = new FileReader(nomeFile);&#10;&#9;&#9;&#9;this.lettura= new BufferedReader(this.fileL);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;while( (this.linea = this.lettura.readLine()) != null ) {&#10;&#9;&#9;&#9;&#9;this.linee++;&#10;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.fileL = new FileReader(nomeFile);&#10;&#9;&#9;&#9;this.lettura = new BufferedReader(this.fileL);&#10;&#9;&#9;&#9;this.num=1;&#10;&#9;&#9;&#9;do {&#10;&#9;&#9;&#9;&#9;while( this.cont &lt; this.num*4 ) {&#10;&#9;&#9;&#9;&#9;&#9;this.cont++;&#10;&#9;&#9;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;&#9;&#9;if( this.linea != null) {&#10;&#9;&#9;&#9;&#9;&#9;&#9;if(this.linea.equals(stringRicerca)) {&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;this.cerca[this.i] = this.num;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;this.i++;&#10;&#9;&#9;&#9;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#9;this.num++;&#10;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;while(this.cont &lt; this.linee);&#10;&#9;&#9;}&#10;&#9;&#9;catch(FileNotFoundException ex) {&#10;&#9;&#9;&#9;System.out.println(&quot;Errore in lettura file..&quot;);&#10;&#9;&#9;}&#10;&#9;&#9;catch(IOException ex) {&#10;&#9;&#9;&#9;System.out.println(&quot;Errore in lettura file..&quot;);&#10;&#9;&#9;}&#10;&#9;}&#10;&#9;&#10;&#9;void stampaRisultati(int nume,String nomeFile) {&#10;&#9;&#9;this.cont=0;&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;// Variabile non usata&#10;&#9;&#9;// con=0;&#10;&#9;&#9;// ----------------------------------&#10;&#9;&#9;this.linee=0;&#10;&#9;&#9;try{&#10;&#9;&#9;&#9;this.fileL = new FileReader(nomeFile);&#10;&#9;&#9;&#9;this.lettura = new BufferedReader(this.fileL);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;while( (this.linea = this.lettura.readLine()) != null ) {&#10;&#9;&#9;&#9;&#9;this.linee++;&#10;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.fileL = new FileReader(nomeFile);&#10;&#9;&#9;&#9;this.lettura = new BufferedReader(this.fileL);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;while(this.cont&lt;nume*4) {&#10;&#9;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;&#9;this.cont++;&#10;&#9;&#9;&#9;}&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;this.risCerca += &quot;Nome: &quot; + this.linea;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;this.risCerca += &quot;\nCognome: &quot; + this.linea;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;this.risCerca += &quot;\nNumero Casa: &quot; + this.linea;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;this.risCerca += &quot;\nIndirizzo: &quot; + this.linea + &quot;\n\n&quot;;&#10;&#9;&#9;}&#10;&#9;&#9;catch(FileNotFoundException ex) {&#10;&#9;&#9;&#9;System.out.println(&quot;Errore in lettura file..&quot;);&#10;&#9;&#9;}&#10;&#9;&#9;catch(IOException ex) { &#10;&#9;&#9;&#9;System.out.println(&quot;Errore in lettura file..&quot;);&#10;&#9;&#9;}&#10;&#9;}&#10;&#10;&#9;void stampa() {&#10;&#9;&#9;&#10;&#9;&#9;try {&#10;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;this.stmNome.setText(&quot;                        Nome :  &quot; + this.linea + &quot;                                            &quot;);&#10;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;this.stmCognome.setText(&quot;                        Cognome :  &quot; + this.linea + &quot;                                  &quot;);&#10;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;this.stmNumero.setText(&quot;                         Numero :  &quot; + this.linea + &quot;                                  &quot;);&#10;&#9;&#9;&#9;this.linea = this.lettura.readLine();&#10;&#9;&#9;&#9;this.stmIndirizzo.setText(&quot;                        Indirizzo :  &quot; + this.linea + &quot;                                  &quot;);&#10;&#9;&#9;}&#10;&#9;&#9;catch(IOException ex) {&#10;&#9;&#9;&#9;System.out.println(&quot;Errore in stampa Dati File.....&quot;);&#10;&#9;&#9;} &#10;&#9;&#9;catch(NullPointerException ex) {&#10;&#9;&#9;&#9;System.out.println(&quot;Nessun file ricevuto...&quot;);&#10;&#9;&#9;}&#10;&#9;}&#10;&#9;&#10;&#9;void reset() {&#10;&#9;&#9;this.inNome.setText(&quot;&quot;);&#10;&#9;&#9;this.inCognome.setText(&quot;&quot;);&#10;&#9;&#9;this.inNumero.setText(&quot;&quot;);&#10;&#9;&#9;this.inIndirizzo.setText(&quot;&quot;);&#10;&#9;}&#10;&#9;&#10;&#9;void pannelloCerca(boolean att) {&#10;&#9;&#9;this.testoStp.setVisible(att);&#10;&#9;&#9;this.inNameRub.setVisible(att);&#10;&#9;&#9;this.infoCerca.setVisible(att);&#10;&#9;&#9;this.inCerca.setVisible(att);&#10;&#9;&#9;Cerca.setVisible(att);&#10;&#9;&#9;back.setVisible(att);&#10;&#9;   }&#10;   &#10;&#9;void pannelloRisultati(boolean att) {&#10;&#9;&#9;this.risultati.setVisible(att);&#10;&#9;&#9;this.back.setVisible(att);&#10;&#9;}&#10;&#9;&#10;&#9;void pannelloInput(boolean att) {&#10;&#9;&#9;this.nome.setVisible(att);&#10;&#9;&#9;this.inNome.setVisible(att);&#10;&#9;&#9;this.Cognome.setVisible(att);&#10;&#9;&#9;this.inCognome.setVisible(att);&#10;&#9;&#9;this.Numero.setVisible(att);&#10;&#9;&#9;this.inNumero.setVisible(att);&#10;&#9;&#9;this.Indirizzo.setVisible(att);&#10;&#9;&#9;this.inIndirizzo.setVisible(att);&#10;&#9;&#9;&#10;&#9;&#9;this.ok.setVisible(att);&#10;&#9;&#9;this.reset.setVisible(att);&#10;&#9;&#9;this.savExit.setVisible(att);&#10;&#9;}&#10;&#9;&#10;&#9;void pannelloOutput(boolean att) {&#10;&#9;&#9;this.stmNome.setVisible(att);&#10;&#9;&#9;this.stmCognome.setVisible(att);&#10;&#9;&#9;this.stmNumero.setVisible(att);&#10;&#9;&#9;this.stmIndirizzo.setVisible(att);&#10;&#9;&#9;this.avanti.setVisible(att);&#10;&#9;&#9;this.back.setVisible(att);&#10;&#9;&#9;this.indietro.setVisible(att);&#10;&#9;}&#10;&#9;&#10;&#9;void pannelloRubIns(boolean att) {&#10;&#9;&#9;this.testoStp.setVisible(false);&#10;&#9;&#9;this.testoIns.setVisible(att);&#10;&#9;&#9;this.inNameRub.setVisible(att);&#10;&#9;&#9;this.invio.setVisible(att);&#10;&#9;&#9;this.invio_.setVisible(false);&#10;&#9;}&#10;&#9;&#10;&#9;void pannelloRubStp(boolean att) {&#10;&#9;&#9;this.testoIns.setVisible(false);&#10;&#9;&#9;this.testoStp.setVisible(att);&#10;&#9;&#9;this.inNameRub.setVisible(att);&#10;&#9;&#9;this.invio.setVisible(false);&#10;&#9;&#9;this.invio_.setVisible(att);&#10;&#9;&#9;this.back.setVisible(att);&#10;&#9;}&#10;&#9;&#10;&#9;void pannelloIndex(boolean att) {&#10;&#9;&#9;this.index.setVisible(att);&#10;&#9;&#9;this.indIns.setVisible(att);&#10;&#9;&#9;this.indStp.setVisible(att);&#10;&#9;&#9;this.indCer.setVisible(att);&#10;&#9;&#9;this.exit.setVisible(att);&#10;&#9;&#9;this.spazio.setVisible(att);&#10;&#9;}&#10;}" Filename="PanelInserimento.java" Intrnl_Id="2"/>
+<SrcFile Content="/**&#10; * FramePri.java&#10; * &#10; * @author Alenadri Enrico - III G&#10; * @date 6/02/2009&#10; * Fixed by:&#10; * &quot;helloIAmPau - Pasquale Boemio &lt;pa.boemio[at]studenti.unina.it&gt;&quot;&#10; * &quot;b3by&quot; - Antonio Bevilacqua &lt;anto.bevilacqua[at]studenti.unina.it&gt;&quot;&#10; * ----------&#10; * This is the frame object showed by Rubrica.java.&#10; * We suppose the purpose of the author is to have an object representative of the view with &#10; * which the user interacts. &#10; * &#10; * We have fixed:&#10; * 1. indentation&#10; * 2. added some inline documentation&#10; * 3. added the serialVersionUID (not necessary)&#10; * &#10; * NB: Some class or variables name are edited in order to respect the standard &quot;camel notation&quot;&#10; * to make this source code more readable. &#10; */&#10;package is2.rubrica;&#10;&#10;import java.awt.Container;&#10;import javax.swing.JFrame;&#10;&#10;public class FramePri extends JFrame {&#10;&#9;&#10;    // L'oggetto JFrame e` un oggetto &quot;Serializable&quot;. Poiche` abbiamo seri problemi,&#10;&#9;// preferiamo eliminare anche tutti i &quot;warning&quot; presenti nel codice, e quindi &#10;&#9;// assegnamo a questo un id autogenerato!&#10;&#9;private static final long serialVersionUID = 5630246559558602437L;&#10;&#9;// Ecco quanto dovra` essere grande il mio pannello!&#10;&#9;public static final int DEFAULT_WIDTH = 300 ;&#10;&#9;public static final int DEFAULT_HEIGHT = 245 ;&#10;&#9;&#10;    /**&#10;     * This method builds the panel and puts it at location (xLoc,yLoc) on the screen. &#10;     * &#10;     * @param xLoc : This is the location of the panel on the axis x&#10;     * @param yLoc : This is the location of the panel on the axis y&#10;     */&#10;&#9;public FramePri(int xLoc,int yLoc){&#10;&#9;&#9;this.setSize(FramePri.DEFAULT_WIDTH, FramePri.DEFAULT_HEIGHT); // setta la dimensione&#10;&#9;&#9;this.setTitle(&quot;Rubrica 2.0  by Aleandri Enrico&quot;); // setta il titolo&#10;&#9;&#9;this.setResizable(false); // non permettere all'utente di fare come cacchio gli pare&#10;&#9;&#9;this.setLocation(xLoc,yLoc); // mettilo proprio li, aspe` un po` piu` a destra, ok!&#10;&#9;&#9;PanelInserimento panelIns = new PanelInserimento(); // crea il contenuto del pannello &#10;&#9;&#9;Container contentPane = getContentPane(); // prendi il contenitore&#10;&#9;&#9;contentPane.add(panelIns); // in tavola!&#10;&#9;&#9;&#10;&#9;}&#10;}&#10;" Filename="FramePri.java" Intrnl_Id="3"/>
+</SrcFileList>
+<CritList>
+<CritListEntry Name="org.codecover.model.utils.criteria.LoopCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.BranchCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.ConditionCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.SynchronizedStatementCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.QMOCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.StatementCoverage" PluginName="org.codecover"/>
+</CritList>
+<BoolOpList>
+<BoolOp Arity="2" Intrnl_Id="4" Name="conditional and (&amp;&amp;)">
+<BoolAssgnmntBoolMapList>
+<MapEntry BoolAssgnmnt="10" Value="false"/>
+<MapEntry BoolAssgnmnt="02" Value="false"/>
+<MapEntry BoolAssgnmnt="11" Value="true"/>
+</BoolAssgnmntBoolMapList>
+</BoolOp>
+<BoolOp Arity="2" Intrnl_Id="5" Name="conditional or (||)">
+<BoolAssgnmntBoolMapList>
+<MapEntry BoolAssgnmnt="01" Value="true"/>
+<MapEntry BoolAssgnmnt="00" Value="false"/>
+<MapEntry BoolAssgnmnt="12" Value="true"/>
+</BoolAssgnmntBoolMapList>
+</BoolOp>
+</BoolOpList>
+<HierarchyLvlTypeList>
+<HierarchyLvlType EnglishName="package" IntrnlName="package" Intrnl_Id="6"/>
+<HierarchyLvlType EnglishName="class" IntrnlName="class" Intrnl_Id="7"/>
+<HierarchyLvlType EnglishName="method" IntrnlName="method" Intrnl_Id="8"/>
+<HierarchyLvlType EnglishName="default package" IntrnlName="default package" Intrnl_Id="9"/>
+</HierarchyLvlTypeList>
+<MASTRoot>
+<HierarchyLvl HierarchyLvlId="728" HierarchyLvlTypeId="9" Intrnl_Id="10" Name="default package">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="727" HierarchyLvlTypeId="6" Intrnl_Id="11" Name="is2">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="726" HierarchyLvlTypeId="6" Intrnl_Id="12" Name="rubrica">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="708" HierarchyLvlTypeId="7" Intrnl_Id="13" Name="Rubrica">
+<Header>
+<Loc EndOffset="716" SrcFileId="1" StartOffset="696"/>
+</Header>
+<LocList>
+<Loc EndOffset="1611" SrcFileId="1" StartOffset="696"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="707" HierarchyLvlTypeId="8" Intrnl_Id="14" Name="main">
+<Header>
+<Loc EndOffset="926" SrcFileId="1" StartOffset="888"/>
+</Header>
+<LocList>
+<Loc EndOffset="1608" SrcFileId="1" StartOffset="888"/>
+</LocList>
+<StmntSeq Intrnl_Id="15">
+<LocList>
+<Loc EndOffset="1000" SrcFileId="1" StartOffset="933"/>
+<Loc EndOffset="1088" SrcFileId="1" StartOffset="1047"/>
+<Loc EndOffset="1184" SrcFileId="1" StartOffset="1131"/>
+<Loc EndOffset="1518" SrcFileId="1" StartOffset="1495"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="is2.rubrica.Rubrica.java" Intrnl_Id="16">
+<LocList>
+<Loc EndOffset="1000" SrcFileId="1" StartOffset="933"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="is2.rubrica.Rubrica.java" Intrnl_Id="17">
+<LocList>
+<Loc EndOffset="1088" SrcFileId="1" StartOffset="1047"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="is2.rubrica.Rubrica.java" Intrnl_Id="18">
+<LocList>
+<Loc EndOffset="1184" SrcFileId="1" StartOffset="1131"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S4" CovItemPrefix="is2.rubrica.Rubrica.java" Intrnl_Id="19">
+<LocList>
+<Loc EndOffset="1518" SrcFileId="1" StartOffset="1495"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="723" HierarchyLvlTypeId="7" Intrnl_Id="20" Name="PanelInserimento">
+<Header>
+<Loc EndOffset="1290" SrcFileId="2" StartOffset="1220"/>
+</Header>
+<LocList>
+<Loc EndOffset="18676" SrcFileId="2" StartOffset="1220"/>
+</LocList>
+<StmntSeq Intrnl_Id="21">
+<LocList>
+<Loc EndOffset="1567" SrcFileId="2" StartOffset="1502"/>
+<Loc EndOffset="1765" SrcFileId="2" StartOffset="1705"/>
+<Loc EndOffset="1945" SrcFileId="2" StartOffset="1896"/>
+<Loc EndOffset="2375" SrcFileId="2" StartOffset="2340"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="22">
+<LocList>
+<Loc EndOffset="1567" SrcFileId="2" StartOffset="1502"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="23">
+<LocList>
+<Loc EndOffset="1765" SrcFileId="2" StartOffset="1705"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="24">
+<LocList>
+<Loc EndOffset="1945" SrcFileId="2" StartOffset="1896"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S4" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="25">
+<LocList>
+<Loc EndOffset="2375" SrcFileId="2" StartOffset="2340"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<HierarchyLvl HierarchyLvlId="709" HierarchyLvlTypeId="8" Intrnl_Id="26" Name="PanelInserimento">
+<Header>
+<Loc EndOffset="2873" SrcFileId="2" StartOffset="2848"/>
+</Header>
+<LocList>
+<Loc EndOffset="8108" SrcFileId="2" StartOffset="2848"/>
+</LocList>
+<StmntSeq Intrnl_Id="27">
+<LocList>
+<Loc EndOffset="2912" SrcFileId="2" StartOffset="2880"/>
+<Loc EndOffset="2973" SrcFileId="2" StartOffset="2915"/>
+<Loc EndOffset="3087" SrcFileId="2" StartOffset="3001"/>
+<Loc EndOffset="3231" SrcFileId="2" StartOffset="3203"/>
+<Loc EndOffset="3316" SrcFileId="2" StartOffset="3274"/>
+<Loc EndOffset="3368" SrcFileId="2" StartOffset="3319"/>
+<Loc EndOffset="3415" SrcFileId="2" StartOffset="3371"/>
+<Loc EndOffset="3579" SrcFileId="2" StartOffset="3496"/>
+<Loc EndOffset="3652" SrcFileId="2" StartOffset="3582"/>
+<Loc EndOffset="3802" SrcFileId="2" StartOffset="3768"/>
+<Loc EndOffset="3839" SrcFileId="2" StartOffset="3805"/>
+<Loc EndOffset="3918" SrcFileId="2" StartOffset="3882"/>
+<Loc EndOffset="4066" SrcFileId="2" StartOffset="4030"/>
+<Loc EndOffset="4143" SrcFileId="2" StartOffset="4109"/>
+<Loc EndOffset="4182" SrcFileId="2" StartOffset="4146"/>
+<Loc EndOffset="4244" SrcFileId="2" StartOffset="4210"/>
+<Loc EndOffset="4325" SrcFileId="2" StartOffset="4247"/>
+<Loc EndOffset="4473" SrcFileId="2" StartOffset="4437"/>
+<Loc EndOffset="4550" SrcFileId="2" StartOffset="4516"/>
+<Loc EndOffset="4694" SrcFileId="2" StartOffset="4662"/>
+<Loc EndOffset="4774" SrcFileId="2" StartOffset="4737"/>
+<Loc EndOffset="4922" SrcFileId="2" StartOffset="4886"/>
+<Loc EndOffset="4999" SrcFileId="2" StartOffset="4965"/>
+<Loc EndOffset="5037" SrcFileId="2" StartOffset="5002"/>
+<Loc EndOffset="5125" SrcFileId="2" StartOffset="5078"/>
+<Loc EndOffset="5181" SrcFileId="2" StartOffset="5128"/>
+<Loc EndOffset="5240" SrcFileId="2" StartOffset="5184"/>
+<Loc EndOffset="5300" SrcFileId="2" StartOffset="5243"/>
+<Loc EndOffset="5332" SrcFileId="2" StartOffset="5303"/>
+<Loc EndOffset="5369" SrcFileId="2" StartOffset="5335"/>
+<Loc EndOffset="5414" SrcFileId="2" StartOffset="5372"/>
+<Loc EndOffset="5450" SrcFileId="2" StartOffset="5417"/>
+<Loc EndOffset="5489" SrcFileId="2" StartOffset="5453"/>
+<Loc EndOffset="5527" SrcFileId="2" StartOffset="5492"/>
+<Loc EndOffset="5568" SrcFileId="2" StartOffset="5530"/>
+<Loc EndOffset="5670" SrcFileId="2" StartOffset="5640"/>
+<Loc EndOffset="5709" SrcFileId="2" StartOffset="5673"/>
+<Loc EndOffset="5746" SrcFileId="2" StartOffset="5712"/>
+<Loc EndOffset="5789" SrcFileId="2" StartOffset="5749"/>
+<Loc EndOffset="5900" SrcFileId="2" StartOffset="5865"/>
+<Loc EndOffset="5944" SrcFileId="2" StartOffset="5903"/>
+<Loc EndOffset="5986" SrcFileId="2" StartOffset="5947"/>
+<Loc EndOffset="6033" SrcFileId="2" StartOffset="5989"/>
+<Loc EndOffset="6068" SrcFileId="2" StartOffset="6036"/>
+<Loc EndOffset="6107" SrcFileId="2" StartOffset="6071"/>
+<Loc EndOffset="6144" SrcFileId="2" StartOffset="6110"/>
+<Loc EndOffset="6352" SrcFileId="2" StartOffset="6331"/>
+<Loc EndOffset="6377" SrcFileId="2" StartOffset="6355"/>
+<Loc EndOffset="6402" SrcFileId="2" StartOffset="6380"/>
+<Loc EndOffset="6427" SrcFileId="2" StartOffset="6405"/>
+<Loc EndOffset="6450" SrcFileId="2" StartOffset="6430"/>
+<Loc EndOffset="6492" SrcFileId="2" StartOffset="6456"/>
+<Loc EndOffset="6531" SrcFileId="2" StartOffset="6495"/>
+<Loc EndOffset="6570" SrcFileId="2" StartOffset="6534"/>
+<Loc EndOffset="6607" SrcFileId="2" StartOffset="6573"/>
+<Loc EndOffset="6682" SrcFileId="2" StartOffset="6658"/>
+<Loc EndOffset="6709" SrcFileId="2" StartOffset="6685"/>
+<Loc EndOffset="6737" SrcFileId="2" StartOffset="6712"/>
+<Loc EndOffset="6761" SrcFileId="2" StartOffset="6740"/>
+<Loc EndOffset="6786" SrcFileId="2" StartOffset="6764"/>
+<Loc EndOffset="6827" SrcFileId="2" StartOffset="6792"/>
+<Loc EndOffset="6866" SrcFileId="2" StartOffset="6830"/>
+<Loc EndOffset="6928" SrcFileId="2" StartOffset="6903"/>
+<Loc EndOffset="6956" SrcFileId="2" StartOffset="6931"/>
+<Loc EndOffset="6982" SrcFileId="2" StartOffset="6959"/>
+<Loc EndOffset="7006" SrcFileId="2" StartOffset="6985"/>
+<Loc EndOffset="7047" SrcFileId="2" StartOffset="7012"/>
+<Loc EndOffset="7113" SrcFileId="2" StartOffset="7093"/>
+<Loc EndOffset="7138" SrcFileId="2" StartOffset="7116"/>
+<Loc EndOffset="7164" SrcFileId="2" StartOffset="7141"/>
+<Loc EndOffset="7192" SrcFileId="2" StartOffset="7167"/>
+<Loc EndOffset="7217" SrcFileId="2" StartOffset="7195"/>
+<Loc EndOffset="7244" SrcFileId="2" StartOffset="7220"/>
+<Loc EndOffset="7272" SrcFileId="2" StartOffset="7247"/>
+<Loc EndOffset="7302" SrcFileId="2" StartOffset="7275"/>
+<Loc EndOffset="7323" SrcFileId="2" StartOffset="7305"/>
+<Loc EndOffset="7347" SrcFileId="2" StartOffset="7326"/>
+<Loc EndOffset="7373" SrcFileId="2" StartOffset="7350"/>
+<Loc EndOffset="7411" SrcFileId="2" StartOffset="7379"/>
+<Loc EndOffset="7449" SrcFileId="2" StartOffset="7414"/>
+<Loc EndOffset="7489" SrcFileId="2" StartOffset="7452"/>
+<Loc EndOffset="7568" SrcFileId="2" StartOffset="7545"/>
+<Loc EndOffset="7597" SrcFileId="2" StartOffset="7571"/>
+<Loc EndOffset="7625" SrcFileId="2" StartOffset="7600"/>
+<Loc EndOffset="7656" SrcFileId="2" StartOffset="7628"/>
+<Loc EndOffset="7683" SrcFileId="2" StartOffset="7659"/>
+<Loc EndOffset="7706" SrcFileId="2" StartOffset="7686"/>
+<Loc EndOffset="7731" SrcFileId="2" StartOffset="7709"/>
+<Loc EndOffset="7766" SrcFileId="2" StartOffset="7734"/>
+<Loc EndOffset="7808" SrcFileId="2" StartOffset="7772"/>
+<Loc EndOffset="7845" SrcFileId="2" StartOffset="7811"/>
+<Loc EndOffset="7886" SrcFileId="2" StartOffset="7848"/>
+<Loc EndOffset="7980" SrcFileId="2" StartOffset="7954"/>
+<Loc EndOffset="8010" SrcFileId="2" StartOffset="7983"/>
+<Loc EndOffset="8040" SrcFileId="2" StartOffset="8013"/>
+<Loc EndOffset="8069" SrcFileId="2" StartOffset="8043"/>
+<Loc EndOffset="8102" SrcFileId="2" StartOffset="8072"/>
+</LocList>
+<BasicStmnt CovItemId="S5" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="28">
+<LocList>
+<Loc EndOffset="2912" SrcFileId="2" StartOffset="2880"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="29">
+<LocList>
+<Loc EndOffset="2973" SrcFileId="2" StartOffset="2915"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="30">
+<LocList>
+<Loc EndOffset="3087" SrcFileId="2" StartOffset="3001"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="31">
+<LocList>
+<Loc EndOffset="3231" SrcFileId="2" StartOffset="3203"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="32">
+<LocList>
+<Loc EndOffset="3316" SrcFileId="2" StartOffset="3274"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S10" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="33">
+<LocList>
+<Loc EndOffset="3368" SrcFileId="2" StartOffset="3319"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S11" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="34">
+<LocList>
+<Loc EndOffset="3415" SrcFileId="2" StartOffset="3371"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S12" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="35">
+<LocList>
+<Loc EndOffset="3579" SrcFileId="2" StartOffset="3496"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S13" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="36">
+<LocList>
+<Loc EndOffset="3652" SrcFileId="2" StartOffset="3582"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S14" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="37">
+<LocList>
+<Loc EndOffset="3802" SrcFileId="2" StartOffset="3768"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S15" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="38">
+<LocList>
+<Loc EndOffset="3839" SrcFileId="2" StartOffset="3805"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S16" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="39">
+<LocList>
+<Loc EndOffset="3918" SrcFileId="2" StartOffset="3882"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S17" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="40">
+<LocList>
+<Loc EndOffset="4066" SrcFileId="2" StartOffset="4030"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S18" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="41">
+<LocList>
+<Loc EndOffset="4143" SrcFileId="2" StartOffset="4109"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S19" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="42">
+<LocList>
+<Loc EndOffset="4182" SrcFileId="2" StartOffset="4146"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S20" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="43">
+<LocList>
+<Loc EndOffset="4244" SrcFileId="2" StartOffset="4210"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S21" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="44">
+<LocList>
+<Loc EndOffset="4325" SrcFileId="2" StartOffset="4247"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S22" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="45">
+<LocList>
+<Loc EndOffset="4473" SrcFileId="2" StartOffset="4437"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S23" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="46">
+<LocList>
+<Loc EndOffset="4550" SrcFileId="2" StartOffset="4516"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S24" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="47">
+<LocList>
+<Loc EndOffset="4694" SrcFileId="2" StartOffset="4662"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S25" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="48">
+<LocList>
+<Loc EndOffset="4774" SrcFileId="2" StartOffset="4737"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S26" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="49">
+<LocList>
+<Loc EndOffset="4922" SrcFileId="2" StartOffset="4886"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S27" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="50">
+<LocList>
+<Loc EndOffset="4999" SrcFileId="2" StartOffset="4965"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S28" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="51">
+<LocList>
+<Loc EndOffset="5037" SrcFileId="2" StartOffset="5002"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S29" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="52">
+<LocList>
+<Loc EndOffset="5125" SrcFileId="2" StartOffset="5078"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S30" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="53">
+<LocList>
+<Loc EndOffset="5181" SrcFileId="2" StartOffset="5128"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S31" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="54">
+<LocList>
+<Loc EndOffset="5240" SrcFileId="2" StartOffset="5184"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S32" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="55">
+<LocList>
+<Loc EndOffset="5300" SrcFileId="2" StartOffset="5243"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S33" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="56">
+<LocList>
+<Loc EndOffset="5332" SrcFileId="2" StartOffset="5303"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S34" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="57">
+<LocList>
+<Loc EndOffset="5369" SrcFileId="2" StartOffset="5335"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S35" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="58">
+<LocList>
+<Loc EndOffset="5414" SrcFileId="2" StartOffset="5372"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S36" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="59">
+<LocList>
+<Loc EndOffset="5450" SrcFileId="2" StartOffset="5417"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S37" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="60">
+<LocList>
+<Loc EndOffset="5489" SrcFileId="2" StartOffset="5453"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S38" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="61">
+<LocList>
+<Loc EndOffset="5527" SrcFileId="2" StartOffset="5492"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S39" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="62">
+<LocList>
+<Loc EndOffset="5568" SrcFileId="2" StartOffset="5530"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S40" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="63">
+<LocList>
+<Loc EndOffset="5670" SrcFileId="2" StartOffset="5640"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S41" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="64">
+<LocList>
+<Loc EndOffset="5709" SrcFileId="2" StartOffset="5673"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S42" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="65">
+<LocList>
+<Loc EndOffset="5746" SrcFileId="2" StartOffset="5712"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S43" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="66">
+<LocList>
+<Loc EndOffset="5789" SrcFileId="2" StartOffset="5749"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S44" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="67">
+<LocList>
+<Loc EndOffset="5900" SrcFileId="2" StartOffset="5865"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S45" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="68">
+<LocList>
+<Loc EndOffset="5944" SrcFileId="2" StartOffset="5903"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S46" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="69">
+<LocList>
+<Loc EndOffset="5986" SrcFileId="2" StartOffset="5947"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S47" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="70">
+<LocList>
+<Loc EndOffset="6033" SrcFileId="2" StartOffset="5989"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S48" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="71">
+<LocList>
+<Loc EndOffset="6068" SrcFileId="2" StartOffset="6036"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S49" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="72">
+<LocList>
+<Loc EndOffset="6107" SrcFileId="2" StartOffset="6071"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S50" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="73">
+<LocList>
+<Loc EndOffset="6144" SrcFileId="2" StartOffset="6110"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S51" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="74">
+<LocList>
+<Loc EndOffset="6352" SrcFileId="2" StartOffset="6331"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S52" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="75">
+<LocList>
+<Loc EndOffset="6377" SrcFileId="2" StartOffset="6355"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S53" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="76">
+<LocList>
+<Loc EndOffset="6402" SrcFileId="2" StartOffset="6380"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S54" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="77">
+<LocList>
+<Loc EndOffset="6427" SrcFileId="2" StartOffset="6405"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S55" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="78">
+<LocList>
+<Loc EndOffset="6450" SrcFileId="2" StartOffset="6430"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S56" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="79">
+<LocList>
+<Loc EndOffset="6492" SrcFileId="2" StartOffset="6456"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S57" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="80">
+<LocList>
+<Loc EndOffset="6531" SrcFileId="2" StartOffset="6495"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S58" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="81">
+<LocList>
+<Loc EndOffset="6570" SrcFileId="2" StartOffset="6534"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S59" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="82">
+<LocList>
+<Loc EndOffset="6607" SrcFileId="2" StartOffset="6573"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S60" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="83">
+<LocList>
+<Loc EndOffset="6682" SrcFileId="2" StartOffset="6658"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S61" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="84">
+<LocList>
+<Loc EndOffset="6709" SrcFileId="2" StartOffset="6685"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S62" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="85">
+<LocList>
+<Loc EndOffset="6737" SrcFileId="2" StartOffset="6712"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S63" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="86">
+<LocList>
+<Loc EndOffset="6761" SrcFileId="2" StartOffset="6740"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S64" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="87">
+<LocList>
+<Loc EndOffset="6786" SrcFileId="2" StartOffset="6764"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S65" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="88">
+<LocList>
+<Loc EndOffset="6827" SrcFileId="2" StartOffset="6792"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S66" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="89">
+<LocList>
+<Loc EndOffset="6866" SrcFileId="2" StartOffset="6830"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S67" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="90">
+<LocList>
+<Loc EndOffset="6928" SrcFileId="2" StartOffset="6903"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S68" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="91">
+<LocList>
+<Loc EndOffset="6956" SrcFileId="2" StartOffset="6931"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S69" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="92">
+<LocList>
+<Loc EndOffset="6982" SrcFileId="2" StartOffset="6959"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S70" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="93">
+<LocList>
+<Loc EndOffset="7006" SrcFileId="2" StartOffset="6985"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S71" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="94">
+<LocList>
+<Loc EndOffset="7047" SrcFileId="2" StartOffset="7012"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S72" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="95">
+<LocList>
+<Loc EndOffset="7113" SrcFileId="2" StartOffset="7093"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S73" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="96">
+<LocList>
+<Loc EndOffset="7138" SrcFileId="2" StartOffset="7116"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S74" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="97">
+<LocList>
+<Loc EndOffset="7164" SrcFileId="2" StartOffset="7141"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S75" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="98">
+<LocList>
+<Loc EndOffset="7192" SrcFileId="2" StartOffset="7167"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S76" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="99">
+<LocList>
+<Loc EndOffset="7217" SrcFileId="2" StartOffset="7195"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S77" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="100">
+<LocList>
+<Loc EndOffset="7244" SrcFileId="2" StartOffset="7220"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S78" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="101">
+<LocList>
+<Loc EndOffset="7272" SrcFileId="2" StartOffset="7247"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S79" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="102">
+<LocList>
+<Loc EndOffset="7302" SrcFileId="2" StartOffset="7275"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S80" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="103">
+<LocList>
+<Loc EndOffset="7323" SrcFileId="2" StartOffset="7305"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S81" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="104">
+<LocList>
+<Loc EndOffset="7347" SrcFileId="2" StartOffset="7326"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S82" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="105">
+<LocList>
+<Loc EndOffset="7373" SrcFileId="2" StartOffset="7350"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S83" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="106">
+<LocList>
+<Loc EndOffset="7411" SrcFileId="2" StartOffset="7379"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S84" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="107">
+<LocList>
+<Loc EndOffset="7449" SrcFileId="2" StartOffset="7414"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S85" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="108">
+<LocList>
+<Loc EndOffset="7489" SrcFileId="2" StartOffset="7452"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S86" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="109">
+<LocList>
+<Loc EndOffset="7568" SrcFileId="2" StartOffset="7545"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S87" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="110">
+<LocList>
+<Loc EndOffset="7597" SrcFileId="2" StartOffset="7571"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S88" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="111">
+<LocList>
+<Loc EndOffset="7625" SrcFileId="2" StartOffset="7600"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S89" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="112">
+<LocList>
+<Loc EndOffset="7656" SrcFileId="2" StartOffset="7628"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S90" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="113">
+<LocList>
+<Loc EndOffset="7683" SrcFileId="2" StartOffset="7659"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S91" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="114">
+<LocList>
+<Loc EndOffset="7706" SrcFileId="2" StartOffset="7686"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S92" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="115">
+<LocList>
+<Loc EndOffset="7731" SrcFileId="2" StartOffset="7709"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S93" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="116">
+<LocList>
+<Loc EndOffset="7766" SrcFileId="2" StartOffset="7734"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S94" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="117">
+<LocList>
+<Loc EndOffset="7808" SrcFileId="2" StartOffset="7772"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S95" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="118">
+<LocList>
+<Loc EndOffset="7845" SrcFileId="2" StartOffset="7811"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S96" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="119">
+<LocList>
+<Loc EndOffset="7886" SrcFileId="2" StartOffset="7848"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S97" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="120">
+<LocList>
+<Loc EndOffset="7980" SrcFileId="2" StartOffset="7954"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S98" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="121">
+<LocList>
+<Loc EndOffset="8010" SrcFileId="2" StartOffset="7983"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S99" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="122">
+<LocList>
+<Loc EndOffset="8040" SrcFileId="2" StartOffset="8013"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S100" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="123">
+<LocList>
+<Loc EndOffset="8069" SrcFileId="2" StartOffset="8043"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S101" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="124">
+<LocList>
+<Loc EndOffset="8102" SrcFileId="2" StartOffset="8072"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="710" HierarchyLvlTypeId="8" Intrnl_Id="125" Name="actionPerformed">
+<Header>
+<Loc EndOffset="8156" SrcFileId="2" StartOffset="8112"/>
+</Header>
+<LocList>
+<Loc EndOffset="13317" SrcFileId="2" StartOffset="8112"/>
+</LocList>
+<StmntSeq Intrnl_Id="126">
+<LocList>
+<Loc EndOffset="8194" SrcFileId="2" StartOffset="8163"/>
+<Loc EndOffset="8234" SrcFileId="2" StartOffset="8197"/>
+<Loc EndOffset="8272" SrcFileId="2" StartOffset="8237"/>
+<Loc EndOffset="8316" SrcFileId="2" StartOffset="8275"/>
+<Loc EndOffset="8356" SrcFileId="2" StartOffset="8319"/>
+<Loc EndOffset="8418" SrcFileId="2" StartOffset="8378"/>
+<Loc EndOffset="8453" SrcFileId="2" StartOffset="8421"/>
+<Loc EndOffset="8669" SrcFileId="2" StartOffset="8459"/>
+<Loc EndOffset="8919" SrcFileId="2" StartOffset="8672"/>
+<Loc EndOffset="9429" SrcFileId="2" StartOffset="8922"/>
+<Loc EndOffset="9755" SrcFileId="2" StartOffset="9432"/>
+<Loc EndOffset="11119" SrcFileId="2" StartOffset="9758"/>
+<Loc EndOffset="11663" SrcFileId="2" StartOffset="11122"/>
+<Loc EndOffset="11715" SrcFileId="2" StartOffset="11666"/>
+<Loc EndOffset="11908" SrcFileId="2" StartOffset="11718"/>
+<Loc EndOffset="12946" SrcFileId="2" StartOffset="11911"/>
+<Loc EndOffset="12999" SrcFileId="2" StartOffset="12949"/>
+<Loc EndOffset="13101" SrcFileId="2" StartOffset="13002"/>
+<Loc EndOffset="13210" SrcFileId="2" StartOffset="13104"/>
+<Loc EndOffset="13314" SrcFileId="2" StartOffset="13213"/>
+</LocList>
+<BasicStmnt CovItemId="S102" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="127">
+<LocList>
+<Loc EndOffset="8194" SrcFileId="2" StartOffset="8163"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S103" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="128">
+<LocList>
+<Loc EndOffset="8234" SrcFileId="2" StartOffset="8197"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S104" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="129">
+<LocList>
+<Loc EndOffset="8272" SrcFileId="2" StartOffset="8237"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S105" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="130">
+<LocList>
+<Loc EndOffset="8316" SrcFileId="2" StartOffset="8275"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S106" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="131">
+<LocList>
+<Loc EndOffset="8356" SrcFileId="2" StartOffset="8319"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S107" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="132">
+<LocList>
+<Loc EndOffset="8418" SrcFileId="2" StartOffset="8378"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S108" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="133">
+<LocList>
+<Loc EndOffset="8453" SrcFileId="2" StartOffset="8421"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S109" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="134">
+<Branch CovItemId="B1" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="135">
+<Cond/>
+<LocList>
+<Loc EndOffset="8669" SrcFileId="2" StartOffset="8483"/>
+</LocList>
+<StmntSeq Intrnl_Id="136">
+<LocList>
+<Loc EndOffset="8558" SrcFileId="2" StartOffset="8488"/>
+<Loc EndOffset="8613" SrcFileId="2" StartOffset="8562"/>
+<Loc EndOffset="8647" SrcFileId="2" StartOffset="8621"/>
+<Loc EndOffset="8665" SrcFileId="2" StartOffset="8651"/>
+</LocList>
+<CondStmnt CovItemId="S110" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="137">
+<Branch CovItemId="B3" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="138">
+<Cond/>
+<LocList>
+<Loc EndOffset="8558" SrcFileId="2" StartOffset="8502"/>
+</LocList>
+<StmntSeq Intrnl_Id="139">
+<LocList>
+<Loc EndOffset="8519" SrcFileId="2" StartOffset="8508"/>
+<Loc EndOffset="8553" SrcFileId="2" StartOffset="8524"/>
+</LocList>
+<BasicStmnt CovItemId="S111" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="140">
+<LocList>
+<Loc EndOffset="8519" SrcFileId="2" StartOffset="8508"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S112" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="141">
+<LocList>
+<Loc EndOffset="8553" SrcFileId="2" StartOffset="8524"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B4" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="142">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="143">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="8490" SrcFileId="2" StartOffset="8488"/>
+<LocList>
+<Loc EndOffset="8558" SrcFileId="2" StartOffset="8488"/>
+</LocList>
+<RootTerm CovItemId="C2" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="144">
+<BasicBoolTerm Intrnl_Id="145">
+<LocList>
+<Loc EndOffset="8501" SrcFileId="2" StartOffset="8491"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S113" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="146">
+<Branch CovItemId="B5" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="147">
+<Cond/>
+<LocList>
+<Loc EndOffset="8613" SrcFileId="2" StartOffset="8581"/>
+</LocList>
+<StmntSeq Intrnl_Id="148">
+<LocList>
+<Loc EndOffset="8613" SrcFileId="2" StartOffset="8581"/>
+</LocList>
+<BasicStmnt CovItemId="S114" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="149">
+<LocList>
+<Loc EndOffset="8613" SrcFileId="2" StartOffset="8581"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B6" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="150">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="151">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="8564" SrcFileId="2" StartOffset="8562"/>
+<LocList>
+<Loc EndOffset="8613" SrcFileId="2" StartOffset="8562"/>
+</LocList>
+<RootTerm CovItemId="C3" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="152">
+<BasicBoolTerm Intrnl_Id="153">
+<LocList>
+<Loc EndOffset="8575" SrcFileId="2" StartOffset="8565"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S115" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="154">
+<LocList>
+<Loc EndOffset="8647" SrcFileId="2" StartOffset="8621"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S116" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="155">
+<LocList>
+<Loc EndOffset="8665" SrcFileId="2" StartOffset="8651"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B2" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="156">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="157">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="8461" SrcFileId="2" StartOffset="8459"/>
+<LocList>
+<Loc EndOffset="8669" SrcFileId="2" StartOffset="8459"/>
+</LocList>
+<RootTerm CovItemId="C1" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="158">
+<BasicBoolTerm Intrnl_Id="159">
+<LocList>
+<Loc EndOffset="8482" SrcFileId="2" StartOffset="8462"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S117" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="160">
+<Branch CovItemId="B7" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="161">
+<Cond/>
+<LocList>
+<Loc EndOffset="8919" SrcFileId="2" StartOffset="8696"/>
+</LocList>
+<StmntSeq Intrnl_Id="162">
+<LocList>
+<Loc EndOffset="8791" SrcFileId="2" StartOffset="8701"/>
+<Loc EndOffset="8863" SrcFileId="2" StartOffset="8795"/>
+<Loc EndOffset="8897" SrcFileId="2" StartOffset="8871"/>
+<Loc EndOffset="8915" SrcFileId="2" StartOffset="8901"/>
+</LocList>
+<CondStmnt CovItemId="S118" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="163">
+<Branch CovItemId="B9" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="164">
+<Cond/>
+<LocList>
+<Loc EndOffset="8791" SrcFileId="2" StartOffset="8733"/>
+</LocList>
+<StmntSeq Intrnl_Id="165">
+<LocList>
+<Loc EndOffset="8750" SrcFileId="2" StartOffset="8739"/>
+<Loc EndOffset="8786" SrcFileId="2" StartOffset="8755"/>
+</LocList>
+<BasicStmnt CovItemId="S119" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="166">
+<LocList>
+<Loc EndOffset="8750" SrcFileId="2" StartOffset="8739"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S120" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="167">
+<LocList>
+<Loc EndOffset="8786" SrcFileId="2" StartOffset="8755"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B10" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="168">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="169">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="8703" SrcFileId="2" StartOffset="8701"/>
+<LocList>
+<Loc EndOffset="8791" SrcFileId="2" StartOffset="8701"/>
+</LocList>
+<RootTerm CovItemId="C5" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="170">
+<BasicBoolTerm Intrnl_Id="171">
+<LocList>
+<Loc EndOffset="8732" SrcFileId="2" StartOffset="8704"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S121" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="172">
+<Branch CovItemId="B11" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="173">
+<Cond/>
+<LocList>
+<Loc EndOffset="8863" SrcFileId="2" StartOffset="8833"/>
+</LocList>
+<StmntSeq Intrnl_Id="174">
+<LocList>
+<Loc EndOffset="8863" SrcFileId="2" StartOffset="8833"/>
+</LocList>
+<BasicStmnt CovItemId="S122" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="175">
+<LocList>
+<Loc EndOffset="8863" SrcFileId="2" StartOffset="8833"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B12" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="176">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="177">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="8797" SrcFileId="2" StartOffset="8795"/>
+<LocList>
+<Loc EndOffset="8863" SrcFileId="2" StartOffset="8795"/>
+</LocList>
+<RootTerm CovItemId="C6" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="178">
+<BasicBoolTerm Intrnl_Id="179">
+<LocList>
+<Loc EndOffset="8827" SrcFileId="2" StartOffset="8798"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S123" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="180">
+<LocList>
+<Loc EndOffset="8897" SrcFileId="2" StartOffset="8871"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S124" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="181">
+<LocList>
+<Loc EndOffset="8915" SrcFileId="2" StartOffset="8901"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B8" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="182">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="183">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="8674" SrcFileId="2" StartOffset="8672"/>
+<LocList>
+<Loc EndOffset="8919" SrcFileId="2" StartOffset="8672"/>
+</LocList>
+<RootTerm CovItemId="C4" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="184">
+<BasicBoolTerm Intrnl_Id="185">
+<LocList>
+<Loc EndOffset="8695" SrcFileId="2" StartOffset="8675"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S125" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="186">
+<Branch CovItemId="B13" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="187">
+<Cond/>
+<LocList>
+<Loc EndOffset="9429" SrcFileId="2" StartOffset="8952"/>
+</LocList>
+<StmntSeq Intrnl_Id="188">
+<LocList>
+<Loc EndOffset="8968" SrcFileId="2" StartOffset="8957"/>
+<Loc EndOffset="8989" SrcFileId="2" StartOffset="8972"/>
+<Loc EndOffset="9058" SrcFileId="2" StartOffset="8993"/>
+<Loc EndOffset="9140" SrcFileId="2" StartOffset="9062"/>
+<Loc EndOffset="9173" SrcFileId="2" StartOffset="9144"/>
+<Loc EndOffset="9209" SrcFileId="2" StartOffset="9177"/>
+<Loc EndOffset="9238" SrcFileId="2" StartOffset="9213"/>
+<Loc EndOffset="9268" SrcFileId="2" StartOffset="9242"/>
+<Loc EndOffset="9299" SrcFileId="2" StartOffset="9272"/>
+<Loc EndOffset="9330" SrcFileId="2" StartOffset="9303"/>
+<Loc EndOffset="9361" SrcFileId="2" StartOffset="9334"/>
+<Loc EndOffset="9391" SrcFileId="2" StartOffset="9365"/>
+<Loc EndOffset="9425" SrcFileId="2" StartOffset="9395"/>
+</LocList>
+<BasicStmnt CovItemId="S126" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="189">
+<LocList>
+<Loc EndOffset="8968" SrcFileId="2" StartOffset="8957"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S127" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="190">
+<LocList>
+<Loc EndOffset="8989" SrcFileId="2" StartOffset="8972"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S128" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="191">
+<LocList>
+<Loc EndOffset="9058" SrcFileId="2" StartOffset="8993"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S129" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="192">
+<LocList>
+<Loc EndOffset="9140" SrcFileId="2" StartOffset="9062"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S130" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="193">
+<LocList>
+<Loc EndOffset="9173" SrcFileId="2" StartOffset="9144"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S131" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="194">
+<LocList>
+<Loc EndOffset="9209" SrcFileId="2" StartOffset="9177"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S132" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="195">
+<LocList>
+<Loc EndOffset="9238" SrcFileId="2" StartOffset="9213"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S133" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="196">
+<LocList>
+<Loc EndOffset="9268" SrcFileId="2" StartOffset="9242"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S134" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="197">
+<LocList>
+<Loc EndOffset="9299" SrcFileId="2" StartOffset="9272"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S135" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="198">
+<LocList>
+<Loc EndOffset="9330" SrcFileId="2" StartOffset="9303"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S136" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="199">
+<LocList>
+<Loc EndOffset="9361" SrcFileId="2" StartOffset="9334"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S137" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="200">
+<LocList>
+<Loc EndOffset="9391" SrcFileId="2" StartOffset="9365"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S138" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="201">
+<LocList>
+<Loc EndOffset="9425" SrcFileId="2" StartOffset="9395"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B14" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="202">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="203">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="8924" SrcFileId="2" StartOffset="8922"/>
+<LocList>
+<Loc EndOffset="9429" SrcFileId="2" StartOffset="8922"/>
+</LocList>
+<RootTerm CovItemId="C7" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="204">
+<BasicBoolTerm Intrnl_Id="205">
+<LocList>
+<Loc EndOffset="8951" SrcFileId="2" StartOffset="8925"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S139" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="206">
+<Branch CovItemId="B15" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="207">
+<Cond/>
+<LocList>
+<Loc EndOffset="9755" SrcFileId="2" StartOffset="9457"/>
+</LocList>
+<StmntSeq Intrnl_Id="208">
+<LocList>
+<Loc EndOffset="9500" SrcFileId="2" StartOffset="9471"/>
+<Loc EndOffset="9537" SrcFileId="2" StartOffset="9505"/>
+<Loc EndOffset="9573" SrcFileId="2" StartOffset="9542"/>
+<Loc EndOffset="9612" SrcFileId="2" StartOffset="9578"/>
+<Loc EndOffset="9730" SrcFileId="2" StartOffset="9462"/>
+<Loc EndOffset="9751" SrcFileId="2" StartOffset="9738"/>
+</LocList>
+<BasicStmnt CovItemId="S141" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="209">
+<LocList>
+<Loc EndOffset="9500" SrcFileId="2" StartOffset="9471"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S142" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="210">
+<LocList>
+<Loc EndOffset="9537" SrcFileId="2" StartOffset="9505"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S143" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="211">
+<LocList>
+<Loc EndOffset="9573" SrcFileId="2" StartOffset="9542"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S144" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="212">
+<LocList>
+<Loc EndOffset="9612" SrcFileId="2" StartOffset="9578"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S140" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="213">
+<Branch CovItemId="B17" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="214">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="215">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B18" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="216">
+<Cond>
+<Loc EndOffset="9652" SrcFileId="2" StartOffset="9622"/>
+</Cond>
+<LocList>
+<Loc EndOffset="9730" SrcFileId="2" StartOffset="9652"/>
+</LocList>
+<StmntSeq Intrnl_Id="217">
+<LocList>
+<Loc EndOffset="9725" SrcFileId="2" StartOffset="9658"/>
+</LocList>
+<BasicStmnt CovItemId="S145" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="218">
+<LocList>
+<Loc EndOffset="9725" SrcFileId="2" StartOffset="9658"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="9465" SrcFileId="2" StartOffset="9462"/>
+<LocList>
+<Loc EndOffset="9730" SrcFileId="2" StartOffset="9462"/>
+</LocList>
+</CondStmnt>
+<BasicStmnt CovItemId="S146" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="219">
+<LocList>
+<Loc EndOffset="9751" SrcFileId="2" StartOffset="9738"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B16" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="220">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="221">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="9434" SrcFileId="2" StartOffset="9432"/>
+<LocList>
+<Loc EndOffset="9755" SrcFileId="2" StartOffset="9432"/>
+</LocList>
+<RootTerm CovItemId="C8" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="222">
+<BasicBoolTerm Intrnl_Id="223">
+<LocList>
+<Loc EndOffset="9456" SrcFileId="2" StartOffset="9435"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S147" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="224">
+<Branch CovItemId="B19" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="225">
+<Cond/>
+<LocList>
+<Loc EndOffset="11119" SrcFileId="2" StartOffset="9785"/>
+</LocList>
+<StmntSeq Intrnl_Id="226">
+<LocList>
+<Loc EndOffset="9800" SrcFileId="2" StartOffset="9790"/>
+<Loc EndOffset="10243" SrcFileId="2" StartOffset="10186"/>
+<Loc EndOffset="10338" SrcFileId="2" StartOffset="10306"/>
+<Loc EndOffset="11115" SrcFileId="2" StartOffset="10342"/>
+</LocList>
+<BasicStmnt CovItemId="S148" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="227">
+<LocList>
+<Loc EndOffset="9800" SrcFileId="2" StartOffset="9790"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S149" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="228">
+<Branch CovItemId="B21" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="229">
+<Cond/>
+<LocList>
+<Loc EndOffset="10243" SrcFileId="2" StartOffset="10230"/>
+</LocList>
+<StmntSeq Intrnl_Id="230">
+<LocList>
+<Loc EndOffset="10243" SrcFileId="2" StartOffset="10230"/>
+</LocList>
+<BasicStmnt CovItemId="S150" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="231">
+<LocList>
+<Loc EndOffset="10243" SrcFileId="2" StartOffset="10230"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B22" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="232">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="233">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="10188" SrcFileId="2" StartOffset="10186"/>
+<LocList>
+<Loc EndOffset="10243" SrcFileId="2" StartOffset="10186"/>
+</LocList>
+<RootTerm CovItemId="C10" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="234">
+<BasicBoolTerm Intrnl_Id="235">
+<LocList>
+<Loc EndOffset="10207" SrcFileId="2" StartOffset="10189"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S151" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="236">
+<LocList>
+<Loc EndOffset="10338" SrcFileId="2" StartOffset="10306"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S152" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="237">
+<Branch CovItemId="B23" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="238">
+<Cond/>
+<LocList>
+<Loc EndOffset="10837" SrcFileId="2" StartOffset="10388"/>
+</LocList>
+<StmntSeq Intrnl_Id="239">
+<LocList>
+<Loc EndOffset="10421" SrcFileId="2" StartOffset="10394"/>
+<Loc EndOffset="10788" SrcFileId="2" StartOffset="10426"/>
+</LocList>
+<BasicStmnt CovItemId="S153" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="240">
+<LocList>
+<Loc EndOffset="10421" SrcFileId="2" StartOffset="10394"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S154" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="241">
+<Branch CovItemId="B25" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="242">
+<Cond/>
+<LocList>
+<Loc EndOffset="10527" SrcFileId="2" StartOffset="10447"/>
+</LocList>
+<StmntSeq Intrnl_Id="243">
+<LocList>
+<Loc EndOffset="10527" SrcFileId="2" StartOffset="10447"/>
+</LocList>
+<BasicStmnt CovItemId="S155" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="244">
+<LocList>
+<Loc EndOffset="10527" SrcFileId="2" StartOffset="10447"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B26" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="245">
+<Cond>
+<Loc EndOffset="10536" SrcFileId="2" StartOffset="10532"/>
+</Cond>
+<LocList>
+<Loc EndOffset="10788" SrcFileId="2" StartOffset="10710"/>
+</LocList>
+<StmntSeq Intrnl_Id="246">
+<LocList>
+<Loc EndOffset="10788" SrcFileId="2" StartOffset="10710"/>
+</LocList>
+<BasicStmnt CovItemId="S156" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="247">
+<LocList>
+<Loc EndOffset="10788" SrcFileId="2" StartOffset="10710"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="10428" SrcFileId="2" StartOffset="10426"/>
+<LocList>
+<Loc EndOffset="10788" SrcFileId="2" StartOffset="10426"/>
+</LocList>
+<RootTerm CovItemId="C12" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="248">
+<BasicBoolTerm Intrnl_Id="249">
+<LocList>
+<Loc EndOffset="10440" SrcFileId="2" StartOffset="10429"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B24" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="250">
+<Cond>
+<Loc EndOffset="10845" SrcFileId="2" StartOffset="10841"/>
+</Cond>
+<LocList>
+<Loc EndOffset="11115" SrcFileId="2" StartOffset="10845"/>
+</LocList>
+<StmntSeq Intrnl_Id="251">
+<LocList>
+<Loc EndOffset="10873" SrcFileId="2" StartOffset="10851"/>
+<Loc EndOffset="10898" SrcFileId="2" StartOffset="10878"/>
+<Loc EndOffset="10956" SrcFileId="2" StartOffset="10913"/>
+<Loc EndOffset="11007" SrcFileId="2" StartOffset="10962"/>
+<Loc EndOffset="11110" SrcFileId="2" StartOffset="10903"/>
+</LocList>
+<BasicStmnt CovItemId="S157" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="252">
+<LocList>
+<Loc EndOffset="10873" SrcFileId="2" StartOffset="10851"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S158" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="253">
+<LocList>
+<Loc EndOffset="10898" SrcFileId="2" StartOffset="10878"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S160" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="254">
+<LocList>
+<Loc EndOffset="10956" SrcFileId="2" StartOffset="10913"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S161" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="255">
+<LocList>
+<Loc EndOffset="11007" SrcFileId="2" StartOffset="10962"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S159" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="256">
+<Branch CovItemId="B27" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="257">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="258">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B28" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="259">
+<Cond>
+<Loc EndOffset="11049" SrcFileId="2" StartOffset="11018"/>
+</Cond>
+<LocList>
+<Loc EndOffset="11110" SrcFileId="2" StartOffset="11049"/>
+</LocList>
+<StmntSeq Intrnl_Id="260">
+<LocList>
+<Loc EndOffset="11104" SrcFileId="2" StartOffset="11056"/>
+</LocList>
+<BasicStmnt CovItemId="S162" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="261">
+<LocList>
+<Loc EndOffset="11104" SrcFileId="2" StartOffset="11056"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="10906" SrcFileId="2" StartOffset="10903"/>
+<LocList>
+<Loc EndOffset="11110" SrcFileId="2" StartOffset="10903"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="10344" SrcFileId="2" StartOffset="10342"/>
+<LocList>
+<Loc EndOffset="11115" SrcFileId="2" StartOffset="10342"/>
+</LocList>
+<RootTerm CovItemId="C11" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="262">
+<OpTerm BooleanOpId="5" Intrnl_Id="263">
+<BasicBoolTerm Intrnl_Id="264">
+<LocList>
+<Loc EndOffset="10369" SrcFileId="2" StartOffset="10347"/>
+</LocList>
+</BasicBoolTerm>
+<BasicBoolTerm Intrnl_Id="265">
+<LocList>
+<Loc EndOffset="10386" SrcFileId="2" StartOffset="10375"/>
+</LocList>
+</BasicBoolTerm>
+<LocList>
+<Loc EndOffset="10373" SrcFileId="2" StartOffset="10371"/>
+</LocList>
+</OpTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B20" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="266">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="267">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="9760" SrcFileId="2" StartOffset="9758"/>
+<LocList>
+<Loc EndOffset="11119" SrcFileId="2" StartOffset="9758"/>
+</LocList>
+<RootTerm CovItemId="C9" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="268">
+<BasicBoolTerm Intrnl_Id="269">
+<LocList>
+<Loc EndOffset="9784" SrcFileId="2" StartOffset="9761"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S163" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="270">
+<Branch CovItemId="B29" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="271">
+<Cond/>
+<LocList>
+<Loc EndOffset="11663" SrcFileId="2" StartOffset="11150"/>
+</LocList>
+<StmntSeq Intrnl_Id="272">
+<LocList>
+<Loc EndOffset="11165" SrcFileId="2" StartOffset="11155"/>
+<Loc EndOffset="11211" SrcFileId="2" StartOffset="11173"/>
+<Loc EndOffset="11251" SrcFileId="2" StartOffset="11219"/>
+<Loc EndOffset="11659" SrcFileId="2" StartOffset="11255"/>
+</LocList>
+<BasicStmnt CovItemId="S164" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="273">
+<LocList>
+<Loc EndOffset="11165" SrcFileId="2" StartOffset="11155"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S165" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="274">
+<Branch CovItemId="B31" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="275">
+<Cond/>
+<LocList>
+<Loc EndOffset="11211" SrcFileId="2" StartOffset="11200"/>
+</LocList>
+<StmntSeq Intrnl_Id="276">
+<LocList>
+<Loc EndOffset="11211" SrcFileId="2" StartOffset="11200"/>
+</LocList>
+<BasicStmnt CovItemId="S166" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="277">
+<LocList>
+<Loc EndOffset="11211" SrcFileId="2" StartOffset="11200"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B32" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="278">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="279">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="11175" SrcFileId="2" StartOffset="11173"/>
+<LocList>
+<Loc EndOffset="11211" SrcFileId="2" StartOffset="11173"/>
+</LocList>
+<RootTerm CovItemId="C14" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="280">
+<BasicBoolTerm Intrnl_Id="281">
+<LocList>
+<Loc EndOffset="11194" SrcFileId="2" StartOffset="11176"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S167" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="282">
+<LocList>
+<Loc EndOffset="11251" SrcFileId="2" StartOffset="11219"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S168" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="283">
+<Branch CovItemId="B33" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="284">
+<Cond/>
+<LocList>
+<Loc EndOffset="11419" SrcFileId="2" StartOffset="11300"/>
+</LocList>
+<StmntSeq Intrnl_Id="285">
+<LocList>
+<Loc EndOffset="11332" SrcFileId="2" StartOffset="11306"/>
+<Loc EndOffset="11351" SrcFileId="2" StartOffset="11337"/>
+<Loc EndOffset="11383" SrcFileId="2" StartOffset="11356"/>
+<Loc EndOffset="11414" SrcFileId="2" StartOffset="11388"/>
+</LocList>
+<BasicStmnt CovItemId="S169" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="286">
+<LocList>
+<Loc EndOffset="11332" SrcFileId="2" StartOffset="11306"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S170" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="287">
+<LocList>
+<Loc EndOffset="11351" SrcFileId="2" StartOffset="11337"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S171" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="288">
+<LocList>
+<Loc EndOffset="11383" SrcFileId="2" StartOffset="11356"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S172" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="289">
+<LocList>
+<Loc EndOffset="11414" SrcFileId="2" StartOffset="11388"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B34" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="290">
+<Cond>
+<Loc EndOffset="11427" SrcFileId="2" StartOffset="11423"/>
+</Cond>
+<LocList>
+<Loc EndOffset="11659" SrcFileId="2" StartOffset="11427"/>
+</LocList>
+<StmntSeq Intrnl_Id="291">
+<LocList>
+<Loc EndOffset="11460" SrcFileId="2" StartOffset="11433"/>
+<Loc EndOffset="11654" SrcFileId="2" StartOffset="11465"/>
+</LocList>
+<BasicStmnt CovItemId="S173" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="292">
+<LocList>
+<Loc EndOffset="11460" SrcFileId="2" StartOffset="11433"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S174" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="293">
+<Branch CovItemId="B35" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="294">
+<Cond/>
+<LocList>
+<Loc EndOffset="11566" SrcFileId="2" StartOffset="11486"/>
+</LocList>
+<StmntSeq Intrnl_Id="295">
+<LocList>
+<Loc EndOffset="11566" SrcFileId="2" StartOffset="11486"/>
+</LocList>
+<BasicStmnt CovItemId="S175" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="296">
+<LocList>
+<Loc EndOffset="11566" SrcFileId="2" StartOffset="11486"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B36" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="297">
+<Cond>
+<Loc EndOffset="11575" SrcFileId="2" StartOffset="11571"/>
+</Cond>
+<LocList>
+<Loc EndOffset="11654" SrcFileId="2" StartOffset="11581"/>
+</LocList>
+<StmntSeq Intrnl_Id="298">
+<LocList>
+<Loc EndOffset="11654" SrcFileId="2" StartOffset="11581"/>
+</LocList>
+<BasicStmnt CovItemId="S176" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="299">
+<LocList>
+<Loc EndOffset="11654" SrcFileId="2" StartOffset="11581"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="11467" SrcFileId="2" StartOffset="11465"/>
+<LocList>
+<Loc EndOffset="11654" SrcFileId="2" StartOffset="11465"/>
+</LocList>
+<RootTerm CovItemId="C16" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="300">
+<BasicBoolTerm Intrnl_Id="301">
+<LocList>
+<Loc EndOffset="11479" SrcFileId="2" StartOffset="11468"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="11257" SrcFileId="2" StartOffset="11255"/>
+<LocList>
+<Loc EndOffset="11659" SrcFileId="2" StartOffset="11255"/>
+</LocList>
+<RootTerm CovItemId="C15" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="302">
+<OpTerm BooleanOpId="4" Intrnl_Id="303">
+<BasicBoolTerm Intrnl_Id="304">
+<LocList>
+<Loc EndOffset="11282" SrcFileId="2" StartOffset="11260"/>
+</LocList>
+</BasicBoolTerm>
+<BasicBoolTerm Intrnl_Id="305">
+<LocList>
+<Loc EndOffset="11298" SrcFileId="2" StartOffset="11288"/>
+</LocList>
+</BasicBoolTerm>
+<LocList>
+<Loc EndOffset="11286" SrcFileId="2" StartOffset="11284"/>
+</LocList>
+</OpTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B30" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="306">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="307">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="11124" SrcFileId="2" StartOffset="11122"/>
+<LocList>
+<Loc EndOffset="11663" SrcFileId="2" StartOffset="11122"/>
+</LocList>
+<RootTerm CovItemId="C13" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="308">
+<BasicBoolTerm Intrnl_Id="309">
+<LocList>
+<Loc EndOffset="11149" SrcFileId="2" StartOffset="11125"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S177" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="310">
+<Branch CovItemId="B37" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="311">
+<Cond/>
+<LocList>
+<Loc EndOffset="11715" SrcFileId="2" StartOffset="11693"/>
+</LocList>
+<StmntSeq Intrnl_Id="312">
+<LocList>
+<Loc EndOffset="11711" SrcFileId="2" StartOffset="11698"/>
+</LocList>
+<BasicStmnt CovItemId="S178" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="313">
+<LocList>
+<Loc EndOffset="11711" SrcFileId="2" StartOffset="11698"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B38" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="314">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="315">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="11668" SrcFileId="2" StartOffset="11666"/>
+<LocList>
+<Loc EndOffset="11715" SrcFileId="2" StartOffset="11666"/>
+</LocList>
+<RootTerm CovItemId="C17" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="316">
+<BasicBoolTerm Intrnl_Id="317">
+<LocList>
+<Loc EndOffset="11692" SrcFileId="2" StartOffset="11669"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S179" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="318">
+<Branch CovItemId="B39" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="319">
+<Cond/>
+<LocList>
+<Loc EndOffset="11908" SrcFileId="2" StartOffset="11751"/>
+</LocList>
+<StmntSeq Intrnl_Id="320">
+<LocList>
+<Loc EndOffset="11782" SrcFileId="2" StartOffset="11756"/>
+<Loc EndOffset="11813" SrcFileId="2" StartOffset="11786"/>
+<Loc EndOffset="11844" SrcFileId="2" StartOffset="11817"/>
+<Loc EndOffset="11873" SrcFileId="2" StartOffset="11848"/>
+<Loc EndOffset="11904" SrcFileId="2" StartOffset="11877"/>
+</LocList>
+<BasicStmnt CovItemId="S180" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="321">
+<LocList>
+<Loc EndOffset="11782" SrcFileId="2" StartOffset="11756"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S181" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="322">
+<LocList>
+<Loc EndOffset="11813" SrcFileId="2" StartOffset="11786"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S182" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="323">
+<LocList>
+<Loc EndOffset="11844" SrcFileId="2" StartOffset="11817"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S183" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="324">
+<LocList>
+<Loc EndOffset="11873" SrcFileId="2" StartOffset="11848"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S184" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="325">
+<LocList>
+<Loc EndOffset="11904" SrcFileId="2" StartOffset="11877"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B40" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="326">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="327">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="11720" SrcFileId="2" StartOffset="11718"/>
+<LocList>
+<Loc EndOffset="11908" SrcFileId="2" StartOffset="11718"/>
+</LocList>
+<RootTerm CovItemId="C18" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="328">
+<BasicBoolTerm Intrnl_Id="329">
+<LocList>
+<Loc EndOffset="11750" SrcFileId="2" StartOffset="11721"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S185" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="330">
+<Branch CovItemId="B41" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="331">
+<Cond/>
+<LocList>
+<Loc EndOffset="12946" SrcFileId="2" StartOffset="11938"/>
+</LocList>
+<StmntSeq Intrnl_Id="332">
+<LocList>
+<Loc EndOffset="11953" SrcFileId="2" StartOffset="11943"/>
+<Loc EndOffset="11999" SrcFileId="2" StartOffset="11961"/>
+<Loc EndOffset="12039" SrcFileId="2" StartOffset="12007"/>
+<Loc EndOffset="12942" SrcFileId="2" StartOffset="12043"/>
+</LocList>
+<BasicStmnt CovItemId="S186" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="333">
+<LocList>
+<Loc EndOffset="11953" SrcFileId="2" StartOffset="11943"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S187" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="334">
+<Branch CovItemId="B43" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="335">
+<Cond/>
+<LocList>
+<Loc EndOffset="11999" SrcFileId="2" StartOffset="11988"/>
+</LocList>
+<StmntSeq Intrnl_Id="336">
+<LocList>
+<Loc EndOffset="11999" SrcFileId="2" StartOffset="11988"/>
+</LocList>
+<BasicStmnt CovItemId="S188" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="337">
+<LocList>
+<Loc EndOffset="11999" SrcFileId="2" StartOffset="11988"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B44" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="338">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="339">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="11963" SrcFileId="2" StartOffset="11961"/>
+<LocList>
+<Loc EndOffset="11999" SrcFileId="2" StartOffset="11961"/>
+</LocList>
+<RootTerm CovItemId="C20" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="340">
+<BasicBoolTerm Intrnl_Id="341">
+<LocList>
+<Loc EndOffset="11982" SrcFileId="2" StartOffset="11964"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S189" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="342">
+<LocList>
+<Loc EndOffset="12039" SrcFileId="2" StartOffset="12007"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S190" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="343">
+<Branch CovItemId="B45" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="344">
+<Cond/>
+<LocList>
+<Loc EndOffset="12701" SrcFileId="2" StartOffset="12088"/>
+</LocList>
+<StmntSeq Intrnl_Id="345">
+<LocList>
+<Loc EndOffset="12132" SrcFileId="2" StartOffset="12094"/>
+<Loc EndOffset="12149" SrcFileId="2" StartOffset="12137"/>
+<Loc EndOffset="12292" SrcFileId="2" StartOffset="12279"/>
+<Loc EndOffset="12323" SrcFileId="2" StartOffset="12297"/>
+<Loc EndOffset="12361" SrcFileId="2" StartOffset="12328"/>
+<Loc EndOffset="12375" SrcFileId="2" StartOffset="12366"/>
+<Loc EndOffset="12588" SrcFileId="2" StartOffset="12380"/>
+<Loc EndOffset="12631" SrcFileId="2" StartOffset="12593"/>
+<Loc EndOffset="12662" SrcFileId="2" StartOffset="12636"/>
+<Loc EndOffset="12696" SrcFileId="2" StartOffset="12667"/>
+</LocList>
+<BasicStmnt CovItemId="S191" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="346">
+<LocList>
+<Loc EndOffset="12132" SrcFileId="2" StartOffset="12094"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S192" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="347">
+<LocList>
+<Loc EndOffset="12149" SrcFileId="2" StartOffset="12137"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S193" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="348">
+<LocList>
+<Loc EndOffset="12292" SrcFileId="2" StartOffset="12279"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S194" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="349">
+<LocList>
+<Loc EndOffset="12323" SrcFileId="2" StartOffset="12297"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S195" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="350">
+<LocList>
+<Loc EndOffset="12361" SrcFileId="2" StartOffset="12328"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S196" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="351">
+<LocList>
+<Loc EndOffset="12375" SrcFileId="2" StartOffset="12366"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S197" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="352">
+<Branch CovItemId="B47" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="353">
+<Cond/>
+<LocList>
+<Loc EndOffset="12529" SrcFileId="2" StartOffset="12401"/>
+</LocList>
+<StmntSeq Intrnl_Id="354">
+<LocList>
+<Loc EndOffset="12523" SrcFileId="2" StartOffset="12408"/>
+</LocList>
+<LoopStmnt CovItemId="S198" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="355" MltplExecId="L1-2" MltplExecPrefix="is2.rubrica.PanelInserimento.java" NvrExecId="L1-0" NvrExecPrefix="is2.rubrica.PanelInserimento.java" OnceExecutedId="L1-1" OnceExecutedPrefix="is2.rubrica.PanelInserimento.java" OptBodyExec="false">
+<StmntSeq Intrnl_Id="356">
+<LocList>
+<Loc EndOffset="12470" SrcFileId="2" StartOffset="12419"/>
+<Loc EndOffset="12486" SrcFileId="2" StartOffset="12477"/>
+</LocList>
+<BasicStmnt CovItemId="S199" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="357">
+<LocList>
+<Loc EndOffset="12470" SrcFileId="2" StartOffset="12419"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S200" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="358">
+<LocList>
+<Loc EndOffset="12486" SrcFileId="2" StartOffset="12477"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="12410" SrcFileId="2" StartOffset="12408"/>
+<LocList>
+<Loc EndOffset="12523" SrcFileId="2" StartOffset="12408"/>
+</LocList>
+<RootTerm CovItemId="C23" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="359">
+<BasicBoolTerm Intrnl_Id="360">
+<LocList>
+<Loc EndOffset="12521" SrcFileId="2" StartOffset="12500"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B48" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="361">
+<Cond>
+<Loc EndOffset="12533" SrcFileId="2" StartOffset="12529"/>
+</Cond>
+<LocList>
+<Loc EndOffset="12588" SrcFileId="2" StartOffset="12533"/>
+</LocList>
+<StmntSeq Intrnl_Id="362">
+<LocList>
+<Loc EndOffset="12582" SrcFileId="2" StartOffset="12540"/>
+</LocList>
+<BasicStmnt CovItemId="S201" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="363">
+<LocList>
+<Loc EndOffset="12582" SrcFileId="2" StartOffset="12540"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="12382" SrcFileId="2" StartOffset="12380"/>
+<LocList>
+<Loc EndOffset="12588" SrcFileId="2" StartOffset="12380"/>
+</LocList>
+<RootTerm CovItemId="C22" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="364">
+<BasicBoolTerm Intrnl_Id="365">
+<LocList>
+<Loc EndOffset="12399" SrcFileId="2" StartOffset="12383"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S202" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="366">
+<LocList>
+<Loc EndOffset="12631" SrcFileId="2" StartOffset="12593"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S203" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="367">
+<LocList>
+<Loc EndOffset="12662" SrcFileId="2" StartOffset="12636"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S204" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="368">
+<LocList>
+<Loc EndOffset="12696" SrcFileId="2" StartOffset="12667"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B46" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="369">
+<Cond>
+<Loc EndOffset="12705" SrcFileId="2" StartOffset="12701"/>
+</Cond>
+<LocList>
+<Loc EndOffset="12942" SrcFileId="2" StartOffset="12705"/>
+</LocList>
+<StmntSeq Intrnl_Id="370">
+<LocList>
+<Loc EndOffset="12738" SrcFileId="2" StartOffset="12711"/>
+<Loc EndOffset="12937" SrcFileId="2" StartOffset="12743"/>
+</LocList>
+<BasicStmnt CovItemId="S205" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="371">
+<LocList>
+<Loc EndOffset="12738" SrcFileId="2" StartOffset="12711"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S206" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="372">
+<Branch CovItemId="B49" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="373">
+<Cond/>
+<LocList>
+<Loc EndOffset="12844" SrcFileId="2" StartOffset="12764"/>
+</LocList>
+<StmntSeq Intrnl_Id="374">
+<LocList>
+<Loc EndOffset="12844" SrcFileId="2" StartOffset="12764"/>
+</LocList>
+<BasicStmnt CovItemId="S207" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="375">
+<LocList>
+<Loc EndOffset="12844" SrcFileId="2" StartOffset="12764"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B50" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="376">
+<Cond>
+<Loc EndOffset="12853" SrcFileId="2" StartOffset="12849"/>
+</Cond>
+<LocList>
+<Loc EndOffset="12937" SrcFileId="2" StartOffset="12859"/>
+</LocList>
+<StmntSeq Intrnl_Id="377">
+<LocList>
+<Loc EndOffset="12937" SrcFileId="2" StartOffset="12859"/>
+</LocList>
+<BasicStmnt CovItemId="S208" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="378">
+<LocList>
+<Loc EndOffset="12937" SrcFileId="2" StartOffset="12859"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="12745" SrcFileId="2" StartOffset="12743"/>
+<LocList>
+<Loc EndOffset="12937" SrcFileId="2" StartOffset="12743"/>
+</LocList>
+<RootTerm CovItemId="C24" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="379">
+<BasicBoolTerm Intrnl_Id="380">
+<LocList>
+<Loc EndOffset="12757" SrcFileId="2" StartOffset="12746"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="12045" SrcFileId="2" StartOffset="12043"/>
+<LocList>
+<Loc EndOffset="12942" SrcFileId="2" StartOffset="12043"/>
+</LocList>
+<RootTerm CovItemId="C21" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="381">
+<OpTerm BooleanOpId="4" Intrnl_Id="382">
+<BasicBoolTerm Intrnl_Id="383">
+<LocList>
+<Loc EndOffset="12070" SrcFileId="2" StartOffset="12048"/>
+</LocList>
+</BasicBoolTerm>
+<BasicBoolTerm Intrnl_Id="384">
+<LocList>
+<Loc EndOffset="12086" SrcFileId="2" StartOffset="12076"/>
+</LocList>
+</BasicBoolTerm>
+<LocList>
+<Loc EndOffset="12074" SrcFileId="2" StartOffset="12072"/>
+</LocList>
+</OpTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B42" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="385">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="386">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="11913" SrcFileId="2" StartOffset="11911"/>
+<LocList>
+<Loc EndOffset="12946" SrcFileId="2" StartOffset="11911"/>
+</LocList>
+<RootTerm CovItemId="C19" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="387">
+<BasicBoolTerm Intrnl_Id="388">
+<LocList>
+<Loc EndOffset="11937" SrcFileId="2" StartOffset="11914"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S209" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="389">
+<Branch CovItemId="B51" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="390">
+<Cond/>
+<LocList>
+<Loc EndOffset="12999" SrcFileId="2" StartOffset="12975"/>
+</LocList>
+<StmntSeq Intrnl_Id="391">
+<LocList>
+<Loc EndOffset="12995" SrcFileId="2" StartOffset="12980"/>
+</LocList>
+<BasicStmnt CovItemId="S210" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="392">
+<LocList>
+<Loc EndOffset="12995" SrcFileId="2" StartOffset="12980"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B52" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="393">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="394">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="12951" SrcFileId="2" StartOffset="12949"/>
+<LocList>
+<Loc EndOffset="12999" SrcFileId="2" StartOffset="12949"/>
+</LocList>
+<RootTerm CovItemId="C25" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="395">
+<BasicBoolTerm Intrnl_Id="396">
+<LocList>
+<Loc EndOffset="12974" SrcFileId="2" StartOffset="12952"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S211" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="397">
+<Branch CovItemId="B53" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="398">
+<Cond/>
+<LocList>
+<Loc EndOffset="13101" SrcFileId="2" StartOffset="13036"/>
+</LocList>
+<StmntSeq Intrnl_Id="399">
+<LocList>
+<Loc EndOffset="13067" SrcFileId="2" StartOffset="13041"/>
+<Loc EndOffset="13097" SrcFileId="2" StartOffset="13071"/>
+</LocList>
+<BasicStmnt CovItemId="S212" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="400">
+<LocList>
+<Loc EndOffset="13067" SrcFileId="2" StartOffset="13041"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S213" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="401">
+<LocList>
+<Loc EndOffset="13097" SrcFileId="2" StartOffset="13071"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B54" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="402">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="403">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="13004" SrcFileId="2" StartOffset="13002"/>
+<LocList>
+<Loc EndOffset="13101" SrcFileId="2" StartOffset="13002"/>
+</LocList>
+<RootTerm CovItemId="C26" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="404">
+<BasicBoolTerm Intrnl_Id="405">
+<LocList>
+<Loc EndOffset="13035" SrcFileId="2" StartOffset="13005"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S214" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="406">
+<Branch CovItemId="B55" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="407">
+<Cond/>
+<LocList>
+<Loc EndOffset="13210" SrcFileId="2" StartOffset="13145"/>
+</LocList>
+<StmntSeq Intrnl_Id="408">
+<LocList>
+<Loc EndOffset="13176" SrcFileId="2" StartOffset="13150"/>
+<Loc EndOffset="13206" SrcFileId="2" StartOffset="13180"/>
+</LocList>
+<BasicStmnt CovItemId="S215" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="409">
+<LocList>
+<Loc EndOffset="13176" SrcFileId="2" StartOffset="13150"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S216" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="410">
+<LocList>
+<Loc EndOffset="13206" SrcFileId="2" StartOffset="13180"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B56" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="411">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="412">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="13106" SrcFileId="2" StartOffset="13104"/>
+<LocList>
+<Loc EndOffset="13210" SrcFileId="2" StartOffset="13104"/>
+</LocList>
+<RootTerm CovItemId="C27" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="413">
+<BasicBoolTerm Intrnl_Id="414">
+<LocList>
+<Loc EndOffset="13144" SrcFileId="2" StartOffset="13107"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<CondStmnt CovItemId="S217" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="415">
+<Branch CovItemId="B57" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="416">
+<Cond/>
+<LocList>
+<Loc EndOffset="13314" SrcFileId="2" StartOffset="13250"/>
+</LocList>
+<StmntSeq Intrnl_Id="417">
+<LocList>
+<Loc EndOffset="13281" SrcFileId="2" StartOffset="13255"/>
+<Loc EndOffset="13310" SrcFileId="2" StartOffset="13285"/>
+</LocList>
+<BasicStmnt CovItemId="S218" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="418">
+<LocList>
+<Loc EndOffset="13281" SrcFileId="2" StartOffset="13255"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S219" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="419">
+<LocList>
+<Loc EndOffset="13310" SrcFileId="2" StartOffset="13285"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B58" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="420">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="421">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="13215" SrcFileId="2" StartOffset="13213"/>
+<LocList>
+<Loc EndOffset="13314" SrcFileId="2" StartOffset="13213"/>
+</LocList>
+<RootTerm CovItemId="C28" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="422">
+<BasicBoolTerm Intrnl_Id="423">
+<LocList>
+<Loc EndOffset="13248" SrcFileId="2" StartOffset="13216"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="711" HierarchyLvlTypeId="8" Intrnl_Id="424" Name="letturaFile">
+<Header>
+<Loc EndOffset="13356" SrcFileId="2" StartOffset="13323"/>
+</Header>
+<LocList>
+<Loc EndOffset="14011" SrcFileId="2" StartOffset="13323"/>
+</LocList>
+<StmntSeq Intrnl_Id="425">
+<LocList>
+<Loc EndOffset="13374" SrcFileId="2" StartOffset="13363"/>
+<Loc EndOffset="13395" SrcFileId="2" StartOffset="13379"/>
+<Loc EndOffset="13454" SrcFileId="2" StartOffset="13416"/>
+<Loc EndOffset="13506" SrcFileId="2" StartOffset="13460"/>
+<Loc EndOffset="13596" SrcFileId="2" StartOffset="13518"/>
+<Loc EndOffset="13646" SrcFileId="2" StartOffset="13608"/>
+<Loc EndOffset="13693" SrcFileId="2" StartOffset="13652"/>
+<Loc EndOffset="13798" SrcFileId="2" StartOffset="13705"/>
+<Loc EndOffset="14008" SrcFileId="2" StartOffset="13405"/>
+</LocList>
+<BasicStmnt CovItemId="S220" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="426">
+<LocList>
+<Loc EndOffset="13374" SrcFileId="2" StartOffset="13363"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S221" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="427">
+<LocList>
+<Loc EndOffset="13395" SrcFileId="2" StartOffset="13379"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S223" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="428">
+<LocList>
+<Loc EndOffset="13454" SrcFileId="2" StartOffset="13416"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S224" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="429">
+<LocList>
+<Loc EndOffset="13506" SrcFileId="2" StartOffset="13460"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S225" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="430" MltplExecId="L2-2" MltplExecPrefix="is2.rubrica.PanelInserimento.java" NvrExecId="L2-0" NvrExecPrefix="is2.rubrica.PanelInserimento.java" OnceExecutedId="L2-1" OnceExecutedPrefix="is2.rubrica.PanelInserimento.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="431">
+<LocList>
+<Loc EndOffset="13596" SrcFileId="2" StartOffset="13580"/>
+</LocList>
+<BasicStmnt CovItemId="S226" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="432">
+<LocList>
+<Loc EndOffset="13596" SrcFileId="2" StartOffset="13580"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="13523" SrcFileId="2" StartOffset="13518"/>
+<LocList>
+<Loc EndOffset="13596" SrcFileId="2" StartOffset="13518"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S227" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="433">
+<LocList>
+<Loc EndOffset="13646" SrcFileId="2" StartOffset="13608"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S228" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="434">
+<LocList>
+<Loc EndOffset="13693" SrcFileId="2" StartOffset="13652"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S229" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="435" MltplExecId="L3-2" MltplExecPrefix="is2.rubrica.PanelInserimento.java" NvrExecId="L3-0" NvrExecPrefix="is2.rubrica.PanelInserimento.java" OnceExecutedId="L3-1" OnceExecutedPrefix="is2.rubrica.PanelInserimento.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="436">
+<LocList>
+<Loc EndOffset="13747" SrcFileId="2" StartOffset="13740"/>
+<Loc EndOffset="13791" SrcFileId="2" StartOffset="13754"/>
+</LocList>
+<BasicStmnt CovItemId="S230" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="437">
+<LocList>
+<Loc EndOffset="13747" SrcFileId="2" StartOffset="13740"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S231" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="438">
+<LocList>
+<Loc EndOffset="13791" SrcFileId="2" StartOffset="13754"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="13710" SrcFileId="2" StartOffset="13705"/>
+<LocList>
+<Loc EndOffset="13798" SrcFileId="2" StartOffset="13705"/>
+</LocList>
+<RootTerm CovItemId="C30" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="439">
+<BasicBoolTerm Intrnl_Id="440">
+<LocList>
+<Loc EndOffset="13729" SrcFileId="2" StartOffset="13712"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<CondStmnt CovItemId="S222" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="441">
+<Branch CovItemId="B59" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="442">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="443">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B60" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="444">
+<Cond>
+<Loc EndOffset="13840" SrcFileId="2" StartOffset="13809"/>
+</Cond>
+<LocList>
+<Loc EndOffset="13921" SrcFileId="2" StartOffset="13841"/>
+</LocList>
+<StmntSeq Intrnl_Id="445">
+<LocList>
+<Loc EndOffset="13915" SrcFileId="2" StartOffset="13848"/>
+</LocList>
+<BasicStmnt CovItemId="S232" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="446">
+<LocList>
+<Loc EndOffset="13915" SrcFileId="2" StartOffset="13848"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B61" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="447">
+<Cond>
+<Loc EndOffset="13947" SrcFileId="2" StartOffset="13926"/>
+</Cond>
+<LocList>
+<Loc EndOffset="14008" SrcFileId="2" StartOffset="13948"/>
+</LocList>
+<StmntSeq Intrnl_Id="448">
+<LocList>
+<Loc EndOffset="14002" SrcFileId="2" StartOffset="13955"/>
+</LocList>
+<BasicStmnt CovItemId="S233" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="449">
+<LocList>
+<Loc EndOffset="14002" SrcFileId="2" StartOffset="13955"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="13408" SrcFileId="2" StartOffset="13405"/>
+<LocList>
+<Loc EndOffset="14008" SrcFileId="2" StartOffset="13405"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="712" HierarchyLvlTypeId="8" Intrnl_Id="450" Name="cerca">
+<Header>
+<Loc EndOffset="14063" SrcFileId="2" StartOffset="14015"/>
+</Header>
+<LocList>
+<Loc EndOffset="14870" SrcFileId="2" StartOffset="14015"/>
+</LocList>
+<StmntSeq Intrnl_Id="451">
+<LocList>
+<Loc EndOffset="14077" SrcFileId="2" StartOffset="14068"/>
+<Loc EndOffset="14129" SrcFileId="2" StartOffset="14091"/>
+<Loc EndOffset="14178" SrcFileId="2" StartOffset="14133"/>
+<Loc EndOffset="14266" SrcFileId="2" StartOffset="14186"/>
+<Loc EndOffset="14312" SrcFileId="2" StartOffset="14274"/>
+<Loc EndOffset="14362" SrcFileId="2" StartOffset="14316"/>
+<Loc EndOffset="14377" SrcFileId="2" StartOffset="14366"/>
+<Loc EndOffset="14691" SrcFileId="2" StartOffset="14381"/>
+<Loc EndOffset="14867" SrcFileId="2" StartOffset="14083"/>
+</LocList>
+<BasicStmnt CovItemId="S234" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="452">
+<LocList>
+<Loc EndOffset="14077" SrcFileId="2" StartOffset="14068"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S236" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="453">
+<LocList>
+<Loc EndOffset="14129" SrcFileId="2" StartOffset="14091"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S237" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="454">
+<LocList>
+<Loc EndOffset="14178" SrcFileId="2" StartOffset="14133"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S238" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="455" MltplExecId="L4-2" MltplExecPrefix="is2.rubrica.PanelInserimento.java" NvrExecId="L4-0" NvrExecPrefix="is2.rubrica.PanelInserimento.java" OnceExecutedId="L4-1" OnceExecutedPrefix="is2.rubrica.PanelInserimento.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="456">
+<LocList>
+<Loc EndOffset="14261" SrcFileId="2" StartOffset="14248"/>
+</LocList>
+<BasicStmnt CovItemId="S239" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="457">
+<LocList>
+<Loc EndOffset="14261" SrcFileId="2" StartOffset="14248"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="14191" SrcFileId="2" StartOffset="14186"/>
+<LocList>
+<Loc EndOffset="14266" SrcFileId="2" StartOffset="14186"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S240" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="458">
+<LocList>
+<Loc EndOffset="14312" SrcFileId="2" StartOffset="14274"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S241" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="459">
+<LocList>
+<Loc EndOffset="14362" SrcFileId="2" StartOffset="14316"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S242" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="460">
+<LocList>
+<Loc EndOffset="14377" SrcFileId="2" StartOffset="14366"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S243" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="461" MltplExecId="L5-2" MltplExecPrefix="is2.rubrica.PanelInserimento.java" NvrExecId="L5-0" NvrExecPrefix="is2.rubrica.PanelInserimento.java" OnceExecutedId="L5-1" OnceExecutedPrefix="is2.rubrica.PanelInserimento.java" OptBodyExec="false">
+<StmntSeq Intrnl_Id="462">
+<LocList>
+<Loc EndOffset="14636" SrcFileId="2" StartOffset="14390"/>
+<Loc EndOffset="14652" SrcFileId="2" StartOffset="14641"/>
+</LocList>
+<LoopStmnt CovItemId="S244" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="463" MltplExecId="L6-2" MltplExecPrefix="is2.rubrica.PanelInserimento.java" NvrExecId="L6-0" NvrExecPrefix="is2.rubrica.PanelInserimento.java" OnceExecutedId="L6-1" OnceExecutedPrefix="is2.rubrica.PanelInserimento.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="464">
+<LocList>
+<Loc EndOffset="14441" SrcFileId="2" StartOffset="14429"/>
+<Loc EndOffset="14484" SrcFileId="2" StartOffset="14447"/>
+<Loc EndOffset="14630" SrcFileId="2" StartOffset="14490"/>
+</LocList>
+<BasicStmnt CovItemId="S245" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="465">
+<LocList>
+<Loc EndOffset="14441" SrcFileId="2" StartOffset="14429"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S246" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="466">
+<LocList>
+<Loc EndOffset="14484" SrcFileId="2" StartOffset="14447"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S247" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="467">
+<Branch CovItemId="B63" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="468">
+<Cond/>
+<LocList>
+<Loc EndOffset="14630" SrcFileId="2" StartOffset="14514"/>
+</LocList>
+<StmntSeq Intrnl_Id="469">
+<LocList>
+<Loc EndOffset="14623" SrcFileId="2" StartOffset="14522"/>
+</LocList>
+<CondStmnt CovItemId="S248" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="470">
+<Branch CovItemId="B65" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="471">
+<Cond/>
+<LocList>
+<Loc EndOffset="14623" SrcFileId="2" StartOffset="14559"/>
+</LocList>
+<StmntSeq Intrnl_Id="472">
+<LocList>
+<Loc EndOffset="14598" SrcFileId="2" StartOffset="14568"/>
+<Loc EndOffset="14615" SrcFileId="2" StartOffset="14606"/>
+</LocList>
+<BasicStmnt CovItemId="S249" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="473">
+<LocList>
+<Loc EndOffset="14598" SrcFileId="2" StartOffset="14568"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S250" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="474">
+<LocList>
+<Loc EndOffset="14615" SrcFileId="2" StartOffset="14606"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B66" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="475">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="476">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="14524" SrcFileId="2" StartOffset="14522"/>
+<LocList>
+<Loc EndOffset="14623" SrcFileId="2" StartOffset="14522"/>
+</LocList>
+<RootTerm CovItemId="C35" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="477">
+<BasicBoolTerm Intrnl_Id="478">
+<LocList>
+<Loc EndOffset="14557" SrcFileId="2" StartOffset="14525"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B64" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="479">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="480">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="14492" SrcFileId="2" StartOffset="14490"/>
+<LocList>
+<Loc EndOffset="14630" SrcFileId="2" StartOffset="14490"/>
+</LocList>
+<RootTerm CovItemId="C34" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="481">
+<BasicBoolTerm Intrnl_Id="482">
+<LocList>
+<Loc EndOffset="14512" SrcFileId="2" StartOffset="14494"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+<Keyword EndOffset="14395" SrcFileId="2" StartOffset="14390"/>
+<LocList>
+<Loc EndOffset="14636" SrcFileId="2" StartOffset="14390"/>
+</LocList>
+<RootTerm CovItemId="C33" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="483">
+<BasicBoolTerm Intrnl_Id="484">
+<LocList>
+<Loc EndOffset="14419" SrcFileId="2" StartOffset="14397"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S251" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="485">
+<LocList>
+<Loc EndOffset="14652" SrcFileId="2" StartOffset="14641"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="14383" SrcFileId="2" StartOffset="14381"/>
+<LocList>
+<Loc EndOffset="14691" SrcFileId="2" StartOffset="14381"/>
+</LocList>
+<RootTerm CovItemId="C32" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="486">
+<BasicBoolTerm Intrnl_Id="487">
+<LocList>
+<Loc EndOffset="14689" SrcFileId="2" StartOffset="14667"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<CondStmnt CovItemId="S235" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="488">
+<Branch CovItemId="B62" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="489">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="490">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B67" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="491">
+<Cond>
+<Loc EndOffset="14729" SrcFileId="2" StartOffset="14698"/>
+</Cond>
+<LocList>
+<Loc EndOffset="14786" SrcFileId="2" StartOffset="14730"/>
+</LocList>
+<StmntSeq Intrnl_Id="492">
+<LocList>
+<Loc EndOffset="14782" SrcFileId="2" StartOffset="14735"/>
+</LocList>
+<BasicStmnt CovItemId="S252" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="493">
+<LocList>
+<Loc EndOffset="14782" SrcFileId="2" StartOffset="14735"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B68" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="494">
+<Cond>
+<Loc EndOffset="14810" SrcFileId="2" StartOffset="14789"/>
+</Cond>
+<LocList>
+<Loc EndOffset="14867" SrcFileId="2" StartOffset="14811"/>
+</LocList>
+<StmntSeq Intrnl_Id="495">
+<LocList>
+<Loc EndOffset="14863" SrcFileId="2" StartOffset="14816"/>
+</LocList>
+<BasicStmnt CovItemId="S253" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="496">
+<LocList>
+<Loc EndOffset="14863" SrcFileId="2" StartOffset="14816"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="14086" SrcFileId="2" StartOffset="14083"/>
+<LocList>
+<Loc EndOffset="14867" SrcFileId="2" StartOffset="14083"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="713" HierarchyLvlTypeId="8" Intrnl_Id="497" Name="stampaRisultati">
+<Header>
+<Loc EndOffset="14920" SrcFileId="2" StartOffset="14874"/>
+</Header>
+<LocList>
+<Loc EndOffset="16012" SrcFileId="2" StartOffset="14874"/>
+</LocList>
+<StmntSeq Intrnl_Id="498">
+<LocList>
+<Loc EndOffset="14937" SrcFileId="2" StartOffset="14925"/>
+<Loc EndOffset="15070" SrcFileId="2" StartOffset="15057"/>
+<Loc EndOffset="15119" SrcFileId="2" StartOffset="15081"/>
+<Loc EndOffset="15169" SrcFileId="2" StartOffset="15123"/>
+<Loc EndOffset="15257" SrcFileId="2" StartOffset="15177"/>
+<Loc EndOffset="15303" SrcFileId="2" StartOffset="15265"/>
+<Loc EndOffset="15353" SrcFileId="2" StartOffset="15307"/>
+<Loc EndOffset="15450" SrcFileId="2" StartOffset="15361"/>
+<Loc EndOffset="15495" SrcFileId="2" StartOffset="15458"/>
+<Loc EndOffset="15538" SrcFileId="2" StartOffset="15499"/>
+<Loc EndOffset="15583" SrcFileId="2" StartOffset="15546"/>
+<Loc EndOffset="15631" SrcFileId="2" StartOffset="15587"/>
+<Loc EndOffset="15676" SrcFileId="2" StartOffset="15639"/>
+<Loc EndOffset="15728" SrcFileId="2" StartOffset="15680"/>
+<Loc EndOffset="15773" SrcFileId="2" StartOffset="15736"/>
+<Loc EndOffset="15832" SrcFileId="2" StartOffset="15777"/>
+<Loc EndOffset="16009" SrcFileId="2" StartOffset="15073"/>
+</LocList>
+<BasicStmnt CovItemId="S254" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="499">
+<LocList>
+<Loc EndOffset="14937" SrcFileId="2" StartOffset="14925"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S255" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="500">
+<LocList>
+<Loc EndOffset="15070" SrcFileId="2" StartOffset="15057"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S257" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="501">
+<LocList>
+<Loc EndOffset="15119" SrcFileId="2" StartOffset="15081"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S258" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="502">
+<LocList>
+<Loc EndOffset="15169" SrcFileId="2" StartOffset="15123"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S259" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="503" MltplExecId="L7-2" MltplExecPrefix="is2.rubrica.PanelInserimento.java" NvrExecId="L7-0" NvrExecPrefix="is2.rubrica.PanelInserimento.java" OnceExecutedId="L7-1" OnceExecutedPrefix="is2.rubrica.PanelInserimento.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="504">
+<LocList>
+<Loc EndOffset="15252" SrcFileId="2" StartOffset="15239"/>
+</LocList>
+<BasicStmnt CovItemId="S260" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="505">
+<LocList>
+<Loc EndOffset="15252" SrcFileId="2" StartOffset="15239"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="15182" SrcFileId="2" StartOffset="15177"/>
+<LocList>
+<Loc EndOffset="15257" SrcFileId="2" StartOffset="15177"/>
+</LocList>
+</LoopStmnt>
+<BasicStmnt CovItemId="S261" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="506">
+<LocList>
+<Loc EndOffset="15303" SrcFileId="2" StartOffset="15265"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S262" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="507">
+<LocList>
+<Loc EndOffset="15353" SrcFileId="2" StartOffset="15307"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S263" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="508" MltplExecId="L8-2" MltplExecPrefix="is2.rubrica.PanelInserimento.java" NvrExecId="L8-0" NvrExecPrefix="is2.rubrica.PanelInserimento.java" OnceExecutedId="L8-1" OnceExecutedPrefix="is2.rubrica.PanelInserimento.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="509">
+<LocList>
+<Loc EndOffset="15428" SrcFileId="2" StartOffset="15391"/>
+<Loc EndOffset="15445" SrcFileId="2" StartOffset="15433"/>
+</LocList>
+<BasicStmnt CovItemId="S264" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="510">
+<LocList>
+<Loc EndOffset="15428" SrcFileId="2" StartOffset="15391"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S265" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="511">
+<LocList>
+<Loc EndOffset="15445" SrcFileId="2" StartOffset="15433"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="15366" SrcFileId="2" StartOffset="15361"/>
+<LocList>
+<Loc EndOffset="15450" SrcFileId="2" StartOffset="15361"/>
+</LocList>
+<RootTerm CovItemId="C37" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="512">
+<BasicBoolTerm Intrnl_Id="513">
+<LocList>
+<Loc EndOffset="15383" SrcFileId="2" StartOffset="15367"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S266" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="514">
+<LocList>
+<Loc EndOffset="15495" SrcFileId="2" StartOffset="15458"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S267" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="515">
+<LocList>
+<Loc EndOffset="15538" SrcFileId="2" StartOffset="15499"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S268" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="516">
+<LocList>
+<Loc EndOffset="15583" SrcFileId="2" StartOffset="15546"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S269" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="517">
+<LocList>
+<Loc EndOffset="15631" SrcFileId="2" StartOffset="15587"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S270" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="518">
+<LocList>
+<Loc EndOffset="15676" SrcFileId="2" StartOffset="15639"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S271" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="519">
+<LocList>
+<Loc EndOffset="15728" SrcFileId="2" StartOffset="15680"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S272" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="520">
+<LocList>
+<Loc EndOffset="15773" SrcFileId="2" StartOffset="15736"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S273" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="521">
+<LocList>
+<Loc EndOffset="15832" SrcFileId="2" StartOffset="15777"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S256" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="522">
+<Branch CovItemId="B69" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="523">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="524">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B70" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="525">
+<Cond>
+<Loc EndOffset="15870" SrcFileId="2" StartOffset="15839"/>
+</Cond>
+<LocList>
+<Loc EndOffset="15927" SrcFileId="2" StartOffset="15871"/>
+</LocList>
+<StmntSeq Intrnl_Id="526">
+<LocList>
+<Loc EndOffset="15923" SrcFileId="2" StartOffset="15876"/>
+</LocList>
+<BasicStmnt CovItemId="S274" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="527">
+<LocList>
+<Loc EndOffset="15923" SrcFileId="2" StartOffset="15876"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B71" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="528">
+<Cond>
+<Loc EndOffset="15951" SrcFileId="2" StartOffset="15930"/>
+</Cond>
+<LocList>
+<Loc EndOffset="16009" SrcFileId="2" StartOffset="15952"/>
+</LocList>
+<StmntSeq Intrnl_Id="529">
+<LocList>
+<Loc EndOffset="16005" SrcFileId="2" StartOffset="15958"/>
+</LocList>
+<BasicStmnt CovItemId="S275" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="530">
+<LocList>
+<Loc EndOffset="16005" SrcFileId="2" StartOffset="15958"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="15076" SrcFileId="2" StartOffset="15073"/>
+<LocList>
+<Loc EndOffset="16009" SrcFileId="2" StartOffset="15073"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="714" HierarchyLvlTypeId="8" Intrnl_Id="531" Name="stampa">
+<Header>
+<Loc EndOffset="16028" SrcFileId="2" StartOffset="16015"/>
+</Header>
+<LocList>
+<Loc EndOffset="16873" SrcFileId="2" StartOffset="16015"/>
+</LocList>
+<StmntSeq Intrnl_Id="532">
+<LocList>
+<Loc EndOffset="16082" SrcFileId="2" StartOffset="16045"/>
+<Loc EndOffset="16205" SrcFileId="2" StartOffset="16086"/>
+<Loc EndOffset="16246" SrcFileId="2" StartOffset="16209"/>
+<Loc EndOffset="16365" SrcFileId="2" StartOffset="16250"/>
+<Loc EndOffset="16406" SrcFileId="2" StartOffset="16369"/>
+<Loc EndOffset="16524" SrcFileId="2" StartOffset="16410"/>
+<Loc EndOffset="16565" SrcFileId="2" StartOffset="16528"/>
+<Loc EndOffset="16688" SrcFileId="2" StartOffset="16569"/>
+<Loc EndOffset="16870" SrcFileId="2" StartOffset="16036"/>
+</LocList>
+<BasicStmnt CovItemId="S277" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="533">
+<LocList>
+<Loc EndOffset="16082" SrcFileId="2" StartOffset="16045"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S278" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="534">
+<LocList>
+<Loc EndOffset="16205" SrcFileId="2" StartOffset="16086"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S279" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="535">
+<LocList>
+<Loc EndOffset="16246" SrcFileId="2" StartOffset="16209"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S280" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="536">
+<LocList>
+<Loc EndOffset="16365" SrcFileId="2" StartOffset="16250"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S281" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="537">
+<LocList>
+<Loc EndOffset="16406" SrcFileId="2" StartOffset="16369"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S282" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="538">
+<LocList>
+<Loc EndOffset="16524" SrcFileId="2" StartOffset="16410"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S283" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="539">
+<LocList>
+<Loc EndOffset="16565" SrcFileId="2" StartOffset="16528"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S284" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="540">
+<LocList>
+<Loc EndOffset="16688" SrcFileId="2" StartOffset="16569"/>
+</LocList>
+</BasicStmnt>
+<CondStmnt CovItemId="S276" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="541">
+<Branch CovItemId="B72" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="true" Intrnl_Id="542">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="543">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B73" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="544">
+<Cond>
+<Loc EndOffset="16716" SrcFileId="2" StartOffset="16695"/>
+</Cond>
+<LocList>
+<Loc EndOffset="16780" SrcFileId="2" StartOffset="16717"/>
+</LocList>
+<StmntSeq Intrnl_Id="545">
+<LocList>
+<Loc EndOffset="16776" SrcFileId="2" StartOffset="16722"/>
+</LocList>
+<BasicStmnt CovItemId="S285" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="546">
+<LocList>
+<Loc EndOffset="16776" SrcFileId="2" StartOffset="16722"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B74" CovItemPrefix="is2.rubrica.PanelInserimento.java" Implct="false" Intrnl_Id="547">
+<Cond>
+<Loc EndOffset="16814" SrcFileId="2" StartOffset="16784"/>
+</Cond>
+<LocList>
+<Loc EndOffset="16870" SrcFileId="2" StartOffset="16815"/>
+</LocList>
+<StmntSeq Intrnl_Id="548">
+<LocList>
+<Loc EndOffset="16866" SrcFileId="2" StartOffset="16820"/>
+</LocList>
+<BasicStmnt CovItemId="S286" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="549">
+<LocList>
+<Loc EndOffset="16866" SrcFileId="2" StartOffset="16820"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="16039" SrcFileId="2" StartOffset="16036"/>
+<LocList>
+<Loc EndOffset="16870" SrcFileId="2" StartOffset="16036"/>
+</LocList>
+</CondStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="715" HierarchyLvlTypeId="8" Intrnl_Id="550" Name="reset">
+<Header>
+<Loc EndOffset="16889" SrcFileId="2" StartOffset="16877"/>
+</Header>
+<LocList>
+<Loc EndOffset="17012" SrcFileId="2" StartOffset="16877"/>
+</LocList>
+<StmntSeq Intrnl_Id="551">
+<LocList>
+<Loc EndOffset="16918" SrcFileId="2" StartOffset="16894"/>
+<Loc EndOffset="16948" SrcFileId="2" StartOffset="16921"/>
+<Loc EndOffset="16977" SrcFileId="2" StartOffset="16951"/>
+<Loc EndOffset="17009" SrcFileId="2" StartOffset="16980"/>
+</LocList>
+<BasicStmnt CovItemId="S287" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="552">
+<LocList>
+<Loc EndOffset="16918" SrcFileId="2" StartOffset="16894"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S288" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="553">
+<LocList>
+<Loc EndOffset="16948" SrcFileId="2" StartOffset="16921"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S289" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="554">
+<LocList>
+<Loc EndOffset="16977" SrcFileId="2" StartOffset="16951"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S290" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="555">
+<LocList>
+<Loc EndOffset="17009" SrcFileId="2" StartOffset="16980"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="716" HierarchyLvlTypeId="8" Intrnl_Id="556" Name="pannelloCerca">
+<Header>
+<Loc EndOffset="17047" SrcFileId="2" StartOffset="17016"/>
+</Header>
+<LocList>
+<Loc EndOffset="17237" SrcFileId="2" StartOffset="17016"/>
+</LocList>
+<StmntSeq Intrnl_Id="557">
+<LocList>
+<Loc EndOffset="17082" SrcFileId="2" StartOffset="17052"/>
+<Loc EndOffset="17116" SrcFileId="2" StartOffset="17085"/>
+<Loc EndOffset="17150" SrcFileId="2" StartOffset="17119"/>
+<Loc EndOffset="17182" SrcFileId="2" StartOffset="17153"/>
+<Loc EndOffset="17207" SrcFileId="2" StartOffset="17185"/>
+<Loc EndOffset="17231" SrcFileId="2" StartOffset="17210"/>
+</LocList>
+<BasicStmnt CovItemId="S291" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="558">
+<LocList>
+<Loc EndOffset="17082" SrcFileId="2" StartOffset="17052"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S292" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="559">
+<LocList>
+<Loc EndOffset="17116" SrcFileId="2" StartOffset="17085"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S293" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="560">
+<LocList>
+<Loc EndOffset="17150" SrcFileId="2" StartOffset="17119"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S294" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="561">
+<LocList>
+<Loc EndOffset="17182" SrcFileId="2" StartOffset="17153"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S295" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="562">
+<LocList>
+<Loc EndOffset="17207" SrcFileId="2" StartOffset="17185"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S296" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="563">
+<LocList>
+<Loc EndOffset="17231" SrcFileId="2" StartOffset="17210"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="717" HierarchyLvlTypeId="8" Intrnl_Id="564" Name="pannelloRisultati">
+<Header>
+<Loc EndOffset="17278" SrcFileId="2" StartOffset="17243"/>
+</Header>
+<LocList>
+<Loc EndOffset="17346" SrcFileId="2" StartOffset="17243"/>
+</LocList>
+<StmntSeq Intrnl_Id="565">
+<LocList>
+<Loc EndOffset="17314" SrcFileId="2" StartOffset="17283"/>
+<Loc EndOffset="17343" SrcFileId="2" StartOffset="17317"/>
+</LocList>
+<BasicStmnt CovItemId="S297" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="566">
+<LocList>
+<Loc EndOffset="17314" SrcFileId="2" StartOffset="17283"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S298" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="567">
+<LocList>
+<Loc EndOffset="17343" SrcFileId="2" StartOffset="17317"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="718" HierarchyLvlTypeId="8" Intrnl_Id="568" Name="pannelloInput">
+<Header>
+<Loc EndOffset="17381" SrcFileId="2" StartOffset="17350"/>
+</Header>
+<LocList>
+<Loc EndOffset="17738" SrcFileId="2" StartOffset="17350"/>
+</LocList>
+<StmntSeq Intrnl_Id="569">
+<LocList>
+<Loc EndOffset="17412" SrcFileId="2" StartOffset="17386"/>
+<Loc EndOffset="17443" SrcFileId="2" StartOffset="17415"/>
+<Loc EndOffset="17475" SrcFileId="2" StartOffset="17446"/>
+<Loc EndOffset="17509" SrcFileId="2" StartOffset="17478"/>
+<Loc EndOffset="17540" SrcFileId="2" StartOffset="17512"/>
+<Loc EndOffset="17573" SrcFileId="2" StartOffset="17543"/>
+<Loc EndOffset="17607" SrcFileId="2" StartOffset="17576"/>
+<Loc EndOffset="17643" SrcFileId="2" StartOffset="17610"/>
+<Loc EndOffset="17673" SrcFileId="2" StartOffset="17649"/>
+<Loc EndOffset="17703" SrcFileId="2" StartOffset="17676"/>
+<Loc EndOffset="17735" SrcFileId="2" StartOffset="17706"/>
+</LocList>
+<BasicStmnt CovItemId="S299" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="570">
+<LocList>
+<Loc EndOffset="17412" SrcFileId="2" StartOffset="17386"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S300" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="571">
+<LocList>
+<Loc EndOffset="17443" SrcFileId="2" StartOffset="17415"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S301" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="572">
+<LocList>
+<Loc EndOffset="17475" SrcFileId="2" StartOffset="17446"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S302" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="573">
+<LocList>
+<Loc EndOffset="17509" SrcFileId="2" StartOffset="17478"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S303" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="574">
+<LocList>
+<Loc EndOffset="17540" SrcFileId="2" StartOffset="17512"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S304" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="575">
+<LocList>
+<Loc EndOffset="17573" SrcFileId="2" StartOffset="17543"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S305" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="576">
+<LocList>
+<Loc EndOffset="17607" SrcFileId="2" StartOffset="17576"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S306" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="577">
+<LocList>
+<Loc EndOffset="17643" SrcFileId="2" StartOffset="17610"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S307" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="578">
+<LocList>
+<Loc EndOffset="17673" SrcFileId="2" StartOffset="17649"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S308" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="579">
+<LocList>
+<Loc EndOffset="17703" SrcFileId="2" StartOffset="17676"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S309" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="580">
+<LocList>
+<Loc EndOffset="17735" SrcFileId="2" StartOffset="17706"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="719" HierarchyLvlTypeId="8" Intrnl_Id="581" Name="pannelloOutput">
+<Header>
+<Loc EndOffset="17774" SrcFileId="2" StartOffset="17742"/>
+</Header>
+<LocList>
+<Loc EndOffset="18010" SrcFileId="2" StartOffset="17742"/>
+</LocList>
+<StmntSeq Intrnl_Id="582">
+<LocList>
+<Loc EndOffset="17808" SrcFileId="2" StartOffset="17779"/>
+<Loc EndOffset="17843" SrcFileId="2" StartOffset="17811"/>
+<Loc EndOffset="17877" SrcFileId="2" StartOffset="17846"/>
+<Loc EndOffset="17914" SrcFileId="2" StartOffset="17880"/>
+<Loc EndOffset="17945" SrcFileId="2" StartOffset="17917"/>
+<Loc EndOffset="17974" SrcFileId="2" StartOffset="17948"/>
+<Loc EndOffset="18007" SrcFileId="2" StartOffset="17977"/>
+</LocList>
+<BasicStmnt CovItemId="S310" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="583">
+<LocList>
+<Loc EndOffset="17808" SrcFileId="2" StartOffset="17779"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S311" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="584">
+<LocList>
+<Loc EndOffset="17843" SrcFileId="2" StartOffset="17811"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S312" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="585">
+<LocList>
+<Loc EndOffset="17877" SrcFileId="2" StartOffset="17846"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S313" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="586">
+<LocList>
+<Loc EndOffset="17914" SrcFileId="2" StartOffset="17880"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S314" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="587">
+<LocList>
+<Loc EndOffset="17945" SrcFileId="2" StartOffset="17917"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S315" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="588">
+<LocList>
+<Loc EndOffset="17974" SrcFileId="2" StartOffset="17948"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S316" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="589">
+<LocList>
+<Loc EndOffset="18007" SrcFileId="2" StartOffset="17977"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="720" HierarchyLvlTypeId="8" Intrnl_Id="590" Name="pannelloRubIns">
+<Header>
+<Loc EndOffset="18046" SrcFileId="2" StartOffset="18014"/>
+</Header>
+<LocList>
+<Loc EndOffset="18216" SrcFileId="2" StartOffset="18014"/>
+</LocList>
+<StmntSeq Intrnl_Id="591">
+<LocList>
+<Loc EndOffset="18083" SrcFileId="2" StartOffset="18051"/>
+<Loc EndOffset="18116" SrcFileId="2" StartOffset="18086"/>
+<Loc EndOffset="18150" SrcFileId="2" StartOffset="18119"/>
+<Loc EndOffset="18180" SrcFileId="2" StartOffset="18153"/>
+<Loc EndOffset="18213" SrcFileId="2" StartOffset="18183"/>
+</LocList>
+<BasicStmnt CovItemId="S317" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="592">
+<LocList>
+<Loc EndOffset="18083" SrcFileId="2" StartOffset="18051"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S318" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="593">
+<LocList>
+<Loc EndOffset="18116" SrcFileId="2" StartOffset="18086"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S319" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="594">
+<LocList>
+<Loc EndOffset="18150" SrcFileId="2" StartOffset="18119"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S320" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="595">
+<LocList>
+<Loc EndOffset="18180" SrcFileId="2" StartOffset="18153"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S321" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="596">
+<LocList>
+<Loc EndOffset="18213" SrcFileId="2" StartOffset="18183"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="721" HierarchyLvlTypeId="8" Intrnl_Id="597" Name="pannelloRubStp">
+<Header>
+<Loc EndOffset="18252" SrcFileId="2" StartOffset="18220"/>
+</Header>
+<LocList>
+<Loc EndOffset="18451" SrcFileId="2" StartOffset="18220"/>
+</LocList>
+<StmntSeq Intrnl_Id="598">
+<LocList>
+<Loc EndOffset="18289" SrcFileId="2" StartOffset="18257"/>
+<Loc EndOffset="18322" SrcFileId="2" StartOffset="18292"/>
+<Loc EndOffset="18356" SrcFileId="2" StartOffset="18325"/>
+<Loc EndOffset="18388" SrcFileId="2" StartOffset="18359"/>
+<Loc EndOffset="18419" SrcFileId="2" StartOffset="18391"/>
+<Loc EndOffset="18448" SrcFileId="2" StartOffset="18422"/>
+</LocList>
+<BasicStmnt CovItemId="S322" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="599">
+<LocList>
+<Loc EndOffset="18289" SrcFileId="2" StartOffset="18257"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S323" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="600">
+<LocList>
+<Loc EndOffset="18322" SrcFileId="2" StartOffset="18292"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S324" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="601">
+<LocList>
+<Loc EndOffset="18356" SrcFileId="2" StartOffset="18325"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S325" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="602">
+<LocList>
+<Loc EndOffset="18388" SrcFileId="2" StartOffset="18359"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S326" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="603">
+<LocList>
+<Loc EndOffset="18419" SrcFileId="2" StartOffset="18391"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S327" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="604">
+<LocList>
+<Loc EndOffset="18448" SrcFileId="2" StartOffset="18422"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="722" HierarchyLvlTypeId="8" Intrnl_Id="605" Name="pannelloIndex">
+<Header>
+<Loc EndOffset="18486" SrcFileId="2" StartOffset="18455"/>
+</Header>
+<LocList>
+<Loc EndOffset="18674" SrcFileId="2" StartOffset="18455"/>
+</LocList>
+<StmntSeq Intrnl_Id="606">
+<LocList>
+<Loc EndOffset="18518" SrcFileId="2" StartOffset="18491"/>
+<Loc EndOffset="18549" SrcFileId="2" StartOffset="18521"/>
+<Loc EndOffset="18580" SrcFileId="2" StartOffset="18552"/>
+<Loc EndOffset="18611" SrcFileId="2" StartOffset="18583"/>
+<Loc EndOffset="18640" SrcFileId="2" StartOffset="18614"/>
+<Loc EndOffset="18671" SrcFileId="2" StartOffset="18643"/>
+</LocList>
+<BasicStmnt CovItemId="S328" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="607">
+<LocList>
+<Loc EndOffset="18518" SrcFileId="2" StartOffset="18491"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S329" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="608">
+<LocList>
+<Loc EndOffset="18549" SrcFileId="2" StartOffset="18521"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S330" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="609">
+<LocList>
+<Loc EndOffset="18580" SrcFileId="2" StartOffset="18552"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S331" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="610">
+<LocList>
+<Loc EndOffset="18611" SrcFileId="2" StartOffset="18583"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S332" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="611">
+<LocList>
+<Loc EndOffset="18640" SrcFileId="2" StartOffset="18614"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S333" CovItemPrefix="is2.rubrica.PanelInserimento.java" Intrnl_Id="612">
+<LocList>
+<Loc EndOffset="18671" SrcFileId="2" StartOffset="18643"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="725" HierarchyLvlTypeId="7" Intrnl_Id="613" Name="FramePri">
+<Header>
+<Loc EndOffset="810" SrcFileId="3" StartOffset="774"/>
+</Header>
+<LocList>
+<Loc EndOffset="2069" SrcFileId="3" StartOffset="774"/>
+</LocList>
+<StmntSeq Intrnl_Id="614">
+<LocList>
+<Loc EndOffset="1090" SrcFileId="3" StartOffset="1024"/>
+<Loc EndOffset="1191" SrcFileId="3" StartOffset="1146"/>
+<Loc EndOffset="1239" SrcFileId="3" StartOffset="1193"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="615">
+<LocList>
+<Loc EndOffset="1090" SrcFileId="3" StartOffset="1024"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="616">
+<LocList>
+<Loc EndOffset="1191" SrcFileId="3" StartOffset="1146"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="617">
+<LocList>
+<Loc EndOffset="1239" SrcFileId="3" StartOffset="1193"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<HierarchyLvl HierarchyLvlId="724" HierarchyLvlTypeId="8" Intrnl_Id="618" Name="FramePri">
+<Header>
+<Loc EndOffset="1527" SrcFileId="3" StartOffset="1493"/>
+</Header>
+<LocList>
+<Loc EndOffset="2067" SrcFileId="3" StartOffset="1493"/>
+</LocList>
+<StmntSeq Intrnl_Id="619">
+<LocList>
+<Loc EndOffset="1593" SrcFileId="3" StartOffset="1531"/>
+<Loc EndOffset="1668" SrcFileId="3" StartOffset="1619"/>
+<Loc EndOffset="1715" SrcFileId="3" StartOffset="1690"/>
+<Loc EndOffset="1805" SrcFileId="3" StartOffset="1777"/>
+<Loc EndOffset="1914" SrcFileId="3" StartOffset="1863"/>
+<Loc EndOffset="1993" SrcFileId="3" StartOffset="1952"/>
+<Loc EndOffset="2047" SrcFileId="3" StartOffset="2021"/>
+</LocList>
+<BasicStmnt CovItemId="S4" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="620">
+<LocList>
+<Loc EndOffset="1593" SrcFileId="3" StartOffset="1531"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S5" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="621">
+<LocList>
+<Loc EndOffset="1668" SrcFileId="3" StartOffset="1619"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="622">
+<LocList>
+<Loc EndOffset="1715" SrcFileId="3" StartOffset="1690"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="623">
+<LocList>
+<Loc EndOffset="1805" SrcFileId="3" StartOffset="1777"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="624">
+<LocList>
+<Loc EndOffset="1914" SrcFileId="3" StartOffset="1863"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="625">
+<LocList>
+<Loc EndOffset="1993" SrcFileId="3" StartOffset="1952"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S10" CovItemPrefix="is2.rubrica.FramePri.java" Intrnl_Id="626">
+<LocList>
+<Loc EndOffset="2047" SrcFileId="3" StartOffset="2021"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+</MASTRoot>
+</TestSessionContainer>
