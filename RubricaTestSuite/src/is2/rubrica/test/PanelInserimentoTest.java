@@ -1,5 +1,9 @@
 package is2.rubrica.test;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Random;
 
 import is2.rubrica.Rubrica;
@@ -123,9 +127,12 @@ public class PanelInserimentoTest extends UISpecTestCase {
 		// vado in creazione rubrica
 		getMainWindow().getButton("Crea rubrica").click();
 		
-		// setto un campo nullo a inNameRub
-		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		// setto inNameRub
+		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName + "_no_items");
 		getMainWindow().getButton("Invio").click();
+		
+		// controllo che abbia creato il file
+		assertTrue(new File(this.thisTestRubName + "_no_items").exists());
 		
 		// vado in aggiungi contatto
 		pannelloRubInsVisible(false);
@@ -141,6 +148,55 @@ public class PanelInserimentoTest extends UISpecTestCase {
 	}
 
 	/**
+	 * Testing if the user inserts contacts
+	 * @throws FileNotFoundException 
+	 */
+	public void testAddContacts() throws Exception{
+		// parto da index
+		pannelloIndexVisible(true);
+		
+		// vado in creazione rubrica
+		getMainWindow().getButton("Crea rubrica").click();
+		
+		// setto inNameRub
+		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
+		getMainWindow().getButton("Invio").click();
+		
+		String[] contatto = new String[] {"nome", "cognome", "numero", "indirizzo"};
+		// inserisco un contatto
+		getMainWindow().getTextBox("inNome").setText(contatto[0]);
+		getMainWindow().getTextBox("inCognome").setText(contatto[1]);
+		getMainWindow().getTextBox("inNumero").setText(contatto[2]);
+		getMainWindow().getTextBox("inIndirizzo").setText(contatto[3]);
+		
+		getMainWindow().getButton("Add").click();
+		
+		// controllo che sia stato inserito il contatto correttamente
+		BufferedReader fileReader = new BufferedReader(new FileReader(new File(this.thisTestRubName)));
+		String linea;
+		int index=0;
+		while((linea = fileReader.readLine()) != null) 
+			assertEquals(contatto[index++], linea);
+		
+		// inserisco di nuovo il contatto per testare il reset dei campi
+		getMainWindow().getTextBox("inNome").setText(contatto[0]);
+		getMainWindow().getTextBox("inCognome").setText(contatto[1]);
+		getMainWindow().getTextBox("inNumero").setText(contatto[2]);
+		getMainWindow().getTextBox("inIndirizzo").setText(contatto[3]);
+		
+		getMainWindow().getButton("Reset").click();
+		
+		// controllo che i campi siano stati resettati
+		assertEquals("", getMainWindow().getTextBox("inNome").getText());
+		assertEquals("", getMainWindow().getTextBox("inCognome").getText());
+		assertEquals("", getMainWindow().getTextBox("inNumero").getText());
+		assertEquals("", getMainWindow().getTextBox("inIndirizzo").getText());
+
+		// torno indietro
+		getMainWindow().getButton("Save & Back").click();
+	}
+	
+	/**
 	 * Testing if the user submit a duplicate name into Creazione Rubrica
 	 */
 	public void testDuplicateNameCreazioneRubrica(){
@@ -149,6 +205,9 @@ public class PanelInserimentoTest extends UISpecTestCase {
 				
 		// vado in creazione rubrica
 		getMainWindow().getButton("Crea rubrica").click();
+		
+		// controllo che gia` esista il file
+		assertTrue(new File(this.thisTestRubName).exists());
 		
 		// setto un campo nullo a inNameRub
 		getMainWindow().getTextBox("inNameRub").setText(this.thisTestRubName);
