@@ -9,4 +9,5 @@
 GuiTest*
 
 # Add libs #
-!RubricaTestSuite/lib/*
+!RubricaBugFix/lib/*
+RubricaBugFix/codecover/*

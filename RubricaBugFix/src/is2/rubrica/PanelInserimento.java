@@ -17,6 +17,8 @@
  * 6. typing error changing "Indirizzo" to "Indirizzo:" (thx to pannelloOutputVisible())
  * 7. added back button for pannelloRubIns (thx to test*CreazioneRubrica())
  * 8. resolved exit issue (thx to testExit())
+ * 9. fixed search issue (thx to testInvalidContactNameCerca())
+ * 10. fixed list contacts issue (thx to testListContacts())
  * 
  * NB: Some class or variables name are edited in order to respect the standard "camel notation"
  * to make this source code more readable. 
@@ -198,6 +200,13 @@ public class PanelInserimento extends JPanel implements ActionListener{
 		//this.stmIndirizzo = new JLabel("Indirizzo");
 		this.stmIndirizzo = new JLabel("Indirizzo:");
 		// -------------------------------------------------
+		// Per poter fare testing, sono stati aggiunti i nomi ai label
+		this.stmNome.setName("nomeLabel");
+		this.stmCognome.setName("cognomeLabel");
+		this.stmNumero.setName("numeroLabel");
+		this.stmIndirizzo.setName("indirizzoLabel");
+		// ----------------------------------
+		
 		this.avanti = new JButton(">>");
 		this.back = new JButton("Indietro");
 		this.indietro = new JButton("<<");
@@ -294,7 +303,16 @@ public class PanelInserimento extends JPanel implements ActionListener{
 				this.num--;
 				this.avanti.setEnabled(true);
 			}
-			if(this.num<0)
+			/* ----------------------------------------
+			 * FIX-10
+			 * ----------------------------------------
+			 * Non viene disattivato il tasto back 
+			 * poiche` il controllo viene fatto 
+			 * su un indice negativo, che non viene mai raggiunto 
+			 */
+			//if(this.num<0)
+			if(this.num==0)
+			// ----------------------------------------
 				this.indietro.setEnabled(false);
 			
 			this.letturaFile(nameRub);
@@ -428,7 +446,15 @@ public class PanelInserimento extends JPanel implements ActionListener{
 				this.cerca = new int[100];
 				this.cerca(this.stringa,nameRub);
 				this.i=0;
-				if(this.cerca[0]==0) {
+				/* ----------------------------------
+				 * FIX-9
+				 * ----------------------------------
+				 * il check erroneamente stampa gli elementi se
+				 * la ricerca non e` andata a buon fine
+				 */
+				//if(this.cerca[0]==0) {
+				if(this.cerca[0]!=0) {
+				// ----------------------------------
 					do {
 						this.stampaRisultati(this.cerca[this.i]-1,nameRub);
 						this.i++;
